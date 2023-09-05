@@ -1,0 +1,49 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# create our folders
+mkdir -p \
+    /config/{data,logs}
+
+# create symlinks for config
+symlinks=( \
+/usr/lib/unifi/data \
+/usr/lib/unifi/logs )
+
+for i in "${symlinks[@]}"; do
+    if [[ -L "$i" && ! "$i" -ef /config/"$(basename "$i")"  ]]; then
+        unlink "$i"
+    fi
+    if [[ ! -L "$i" ]]; then
+        ln -s /config/"$(basename "$i")" "$i"
+    fi
+done
+
+if [[ ! -e /config/data/system.properties ]]; then
+    if [[ -z "${MONGO_HOST}" ]]; then
+        echo "*** No MONGO_HOST set, cannot configure database settings. ***"
+        exit 1
+    else
+        sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties
+        sed -i "s/~MONGO_PASS~/${MONGO_PASS}/" /defaults/system.properties
+        sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties
+        sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties
+        sed -i "s/~MONGO_DBNAME~/${MONGO_DBNAME}/" /defaults/system.properties
+        cp /defaults/system.properties /config/data
+    fi
+fi
+
+# generate key
+if [[ ! -f /config/data/keystore ]]; then
+    keytool -genkey -keyalg RSA -alias unifi -keystore /config/data/keystore \
+    -storepass aircontrolenterprise -keypass aircontrolenterprise -validity 3650 \
+    -keysize 4096 -dname "cn=unifi" -ext san=dns:unifi
+fi
+
+# permissions
+lsiown -R abc:abc \
+	/config \
+	/run/unifi
+
+lsiown abc:abc \
+    /config/data/keystore

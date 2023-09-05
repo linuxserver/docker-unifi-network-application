@@ -1,0 +1,45 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+if [[ -z ${MEM_LIMIT} ]] || [[ ${MEM_LIMIT} = "default" ]]; then
+    MEM_LIMIT="1024"
+fi
+
+if [[ -z ${MEM_STARTUP} ]] || [[ ${MEM_STARTUP} = "default" ]]; then
+    exec \
+        s6-notifyoncheck -d -n 600 -w 1000 \
+        cd /config s6-setuidgid abc java \
+            -Xmx"${MEM_LIMIT}M" \
+            -Dlog4j2.formatMsgNoLookups=true \
+            -Dfile.encoding=UTF-8 \
+            -Djava.awt.headless=true \
+            -Dapple.awt.UIElement=true \
+            -XX:+UseParallelGC \
+            -XX:+ExitOnOutOfMemoryError \
+            -XX:+CrashOnOutOfMemoryError \
+            --add-opens java.base/java.lang=ALL-UNNAMED \
+            --add-opens java.base/java.time=ALL-UNNAMED \
+            --add-opens java.base/sun.security.util=ALL-UNNAMED \
+            --add-opens java.base/java.io=ALL-UNNAMED \
+            --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
+            -jar /usr/lib/unifi/lib/ace.jar start;
+else
+    exec \
+        s6-notifyoncheck -d -n 600 -w 1000 \
+        cd /config s6-setuidgid abc java \
+            -Xms"${MEM_STARTUP}M" \
+            -Xmx"${MEM_LIMIT}M" \
+            -Dlog4j2.formatMsgNoLookups=true \
+            -Dfile.encoding=UTF-8 \
+            -Djava.awt.headless=true \
+            -Dapple.awt.UIElement=true \
+            -XX:+UseParallelGC \
+            -XX:+ExitOnOutOfMemoryError \
+            -XX:+CrashOnOutOfMemoryError \
+            --add-opens java.base/java.lang=ALL-UNNAMED \
+            --add-opens java.base/java.time=ALL-UNNAMED \
+            --add-opens java.base/sun.security.util=ALL-UNNAMED \
+            --add-opens java.base/java.io=ALL-UNNAMED \
+            --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
+            -jar /usr/lib/unifi/lib/ace.jar start;
+fi
