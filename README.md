@@ -65,9 +65,9 @@ The web UI is at https://ip:8443, setup with the first run wizard.
 
 ### Setting Up Your External Database
 
-Formally only mongodb 3.6 through 4.4 are supported, however, it has been reported that versions up to and including 7 will work. If you choose to use a newer version be aware that you will not be operating a supported configuration.
+Formally only mongodb 3.6 through 4.4 are supported, however, it has been reported that newer versions will work. If you choose to use a newer version be aware that you will not be operating a supported configuration.
 
-Create your databases using an `init-mongo.js` file with the following contents:
+If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your databases using an `init-mongo.js` file with the following contents:
 
 ```js
 db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "readWrite", db: "MONGO_DBNAME"}]});
