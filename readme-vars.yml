@@ -98,6 +98,8 @@ app_setup_block: |
 
   ### Migration From [Unifi-Controller](https://github.com/linuxserver/docker-unifi-controller)
 
+  If you were using the `mongoless` tag for the Unifi Controller container, you can switch directly to the Unifi Network Application container without needing to perform any migration steps.
+
   **You cannot perform an in-place upgrade from an existing Unifi-Controller container, you must run a backup and then a restore.**
 
   The simplest migration approach is to take a full backup of your existing install, including history, from the Unifi-Controller web UI, then shut down the old container.
