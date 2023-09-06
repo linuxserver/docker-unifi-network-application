@@ -74,7 +74,7 @@ db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS
 db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "readWrite", db: "MONGO_DBNAME_stat"}]});
 ```
 
-Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your database container.
+Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
 
 ```yaml
 volumes:
