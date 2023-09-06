@@ -2,9 +2,9 @@ NAME                                      VERSION                               
 ace                                                                                java-archive  
 activation                                1.1.1                                    java-archive  
 adduser                                   3.118ubuntu5                             deb           
-analytics-api                             1.2.1                                    java-archive  
-analytics-client                          1.2.1                                    java-archive  
-analytics-privacy                         1.2.1                                    java-archive  
+analytics-api                             1.3.0                                    java-archive  
+analytics-client                          1.3.0                                    java-archive  
+analytics-privacy                         1.3.0                                    java-archive  
 annotations                               3.0.1                                    java-archive  
 antlr4-runtime                            4.5.3                                    java-archive  
 api-common                                1.7.0                                    java-archive  
@@ -132,7 +132,7 @@ jmdns                                     3.4.1                                 
 jna                                       5.9.0                                    java-archive  
 joda-time                                 2.10.4                                   java-archive  
 jq                                        1.6-2.1ubuntu3                           deb           
-jrt-fs                                    11.0.20.1                                java-archive  
+jrt-fs                                    17.0.8.1                                 java-archive  
 json                                      20190722                                 java-archive  
 jsr305                                    3.0.1                                    java-archive  
 jsr305                                    3.0.2                                    java-archive  
@@ -252,6 +252,7 @@ libzstd1                                  1.4.8+dfsg-3build1                    
 locales                                   2.35-0ubuntu3.1                          deb           
 log4j-api                                 2.17.2                                   java-archive  
 log4j-to-slf4j                            2.17.2                                   java-archive  
+logback-access                            1.2.11                                   java-archive  
 logback-classic                           1.2.11                                   java-archive  
 logback-core                              1.2.11                                   java-archive  
 login                                     1:4.8.1-2ubuntu2.1                       deb           
@@ -268,7 +269,7 @@ ncurses-base                              6.3-2ubuntu0.1                        
 ncurses-bin                               6.3-2ubuntu0.1                           deb           
 netcat                                    1.218-4ubuntu1                           deb           
 netcat-openbsd                            1.218-4ubuntu1                           deb           
-openjdk-11-jre-headless                   11.0.20.1+1-0ubuntu1~22.04               deb           
+openjdk-17-jre-headless                   17.0.8.1+1~us1-0ubuntu1~22.04            deb           
 openssh                                   1.0                                      java-archive  
 openssl                                   3.0.2-0ubuntu1.10                        deb           
 org.eclipse.paho.client.mqttv3            1.1.0                                    java-archive  
@@ -327,7 +328,7 @@ txw2                                      2.3.0.1                               
 tzdata                                    2023c-0ubuntu0.22.04.2                   deb           
 ubuntu-keyring                            2021.03.26                               deb           
 ucf                                       3.0043                                   deb           
-unifi                                     7.4.162-21057-1                          deb           
+unifi                                     7.5.174-22700-1                          deb           
 urlrewritefilter                          4.0.4                                    java-archive  
 usrmerge                                  25ubuntu2                                deb           
 util-linux                                2.37.2-4ubuntu3                          deb           
