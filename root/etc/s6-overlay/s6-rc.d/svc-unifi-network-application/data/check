@@ -1,0 +1,9 @@
+#!/bin/bash
+
+WEB_PORT=$(grep 'unifi.https.port=' '/config/data/system.properties' | awk -F '=' '{print $2}')
+
+if [[ $(curl -skL "https://localhost:${WEB_PORT:-8443}/status" | jq -r '.meta.up' 2>/dev/null) = true ]]; then
+    exit 0
+else
+    exit 1
+fi

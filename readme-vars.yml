@@ -1,0 +1,111 @@
+---
+
+# project information
+project_name: unifi-network-application
+project_url: "https://ui.com/"
+project_logo: "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/unifi-banner.png"
+project_blurb: "The [{{ project_name|capitalize }}]({{ project_url }}) software is a powerful, enterprise wireless software engine ideal for high-density client deployments requiring low latency and high uptime performance."
+project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
+
+# supported architectures
+available_architectures:
+  - { arch: "{{ arch_x86_64 }}", tag: "amd64-latest"}
+  - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
+
+# development version
+development_versions: false
+
+# container parameters
+param_container_name: "{{ project_name }}"
+param_usage_include_vols: true
+param_volumes:
+  - { vol_path: "/config", vol_host_path: "/path/to/data", desc: "All Unifi data stored here" }
+
+param_usage_include_ports: true
+param_ports:
+  - { external_port: "8443", internal_port: "8443", port_desc: "Unifi web admin port" }
+  - { external_port: "3478", internal_port: "3478/udp", port_desc: "Unifi STUN port" }
+  - { external_port: "10001", internal_port: "10001/udp", port_desc: "Required for AP discovery" }
+  - { external_port: "8080", internal_port: "8080", port_desc: "Required for device communication" }
+
+param_usage_include_env: true
+param_env_vars:
+  - { env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run." }
+  - { env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run." }
+  - { env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run." }
+  - { env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run." }
+  - { env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run." }
+
+# optional container parameters
+opt_param_usage_include_env: true
+opt_param_env_vars:
+  - { env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default" }
+  - { env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default" }
+
+opt_param_usage_include_ports: true
+opt_param_ports:
+  - { external_port: "1900", internal_port: "1900/udp", port_desc: "Required for `Make controller discoverable on L2 network` option" }
+  - { external_port: "8843", internal_port: "8843", port_desc: "Unifi guest portal HTTPS redirect port" }
+  - { external_port: "8880", internal_port: "8880", port_desc: "Unifi guest portal HTTP redirect port" }
+  - { external_port: "6789", internal_port: "6789", port_desc: "For mobile throughput test" }
+  - { external_port: "5514", internal_port: "5514/udp", port_desc: "Remote syslog port" }
+
+# application setup block
+app_setup_block_enabled: true
+app_setup_block: |
+  ### This container requires an external mongodb database instance.
+
+  The web UI is at https://ip:8443, setup with the first run wizard.
+
+  ### Setting Up Your External Database
+
+  Formally only mongodb 3.6 through 4.4 are supported, however, it has been reported that newer versions will work. If you choose to use a newer version be aware that you will not be operating a supported configuration.
+
+  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your databases using an `init-mongo.js` file with the following contents:
+
+  ```js
+  db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "readWrite", db: "MONGO_DBNAME"}]});
+  db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "readWrite", db: "MONGO_DBNAME_stat"}]});
+  ```
+
+  Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
+
+  ```yaml
+  volumes:
+    - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+  ```
+
+  *Note that the init script method will only work on first run. If you start the mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
+
+  You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
+
+  ### Device Adoption
+
+  For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to Settings > System > Advanced and set the Inform Host to a hostname or IP address accessible by your devices. Additionally the checkbox "Override" has to be checked, so that devices can connect to the controller during adoption (devices use the inform-endpoint during adoption).
+
+  **Please note, Unifi change the location of this option every few releases so if it's not where it says, search for "Inform" or "Inform Host" in the settings.**
+
+  In order to manually adopt a device take these steps:
+
+  ```
+  ssh ubnt@$AP-IP
+  set-inform http://$address:8080/inform
+  ```
+
+  The default device password is `ubnt`. `$address` is the IP address of the host you are running this container on and `$AP-IP` is the Access Point IP address.
+
+  When using a Security Gateway (router) it could be that network connected devices are unable to obtain an ip address. This can be fixed by setting "DHCP Gateway IP", under Settings > Networks > network_name, to a correct (and accessible) ip address.
+
+  ### Migration From [Unifi-Controller](https://github.com/linuxserver/docker-unifi-controller)
+
+  If you were using the `mongoless` tag for the Unifi Controller container, you can switch directly to the Unifi Network Application container without needing to perform any migration steps.
+
+  **You cannot perform an in-place upgrade from an existing Unifi-Controller container, you must run a backup and then a restore.**
+
+  The simplest migration approach is to take a full backup of your existing install, including history, from the Unifi-Controller web UI, then shut down the old container.
+
+  You can then start up the new container with a clean `/config` mount (and a database container configured), and perform a restore using the setup wizard.
+
+# changelog
+changelogs:
+  - { date: "05.09.23:", desc: "Initial release." }

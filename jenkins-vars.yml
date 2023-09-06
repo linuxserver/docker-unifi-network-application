@@ -1,0 +1,27 @@
+---
+
+# jenkins variables
+project_name: unifi-network-application
+external_type: na
+custom_version_command: "curl -sX GET http://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}'"
+release_type: stable
+release_tag: latest
+ls_branch: main
+repo_vars:
+  - BUILD_VERSION_ARG = 'UNIFI_VERSION'
+  - LS_USER = 'linuxserver'
+  - LS_REPO = 'docker-unifi-network-application'
+  - CONTAINER_NAME = 'unifi-network-application'
+  - DOCKERHUB_IMAGE = 'linuxserver/unifi-network-application'
+  - DEV_DOCKERHUB_IMAGE = 'lsiodev/unifi-network-application'
+  - PR_DOCKERHUB_IMAGE = 'lspipepr/unifi-network-application'
+  - DIST_IMAGE = 'ubuntu'
+  - MULTIARCH='true'
+  - CI='false'
+  - CI_WEB='false'
+  - CI_PORT='8443'
+  - CI_SSL='true'
+  - CI_DELAY='180'
+  - CI_DOCKERENV='TZ=US/Pacific'
+  - CI_AUTH='user:password'
+  - CI_WEBPATH=''
