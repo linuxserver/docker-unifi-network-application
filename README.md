@@ -67,6 +67,8 @@ The web UI is at https://ip:8443, setup with the first run wizard.
 
 Formally only mongodb 3.6 through 4.4 are supported, however, it has been reported that newer versions will work. If you choose to use a newer version be aware that you will not be operating a supported configuration.
 
+**Make sure you pin your database image version and do not use `latest`, as mongodb does not support automatic upgrades between major versions.**
+
 If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your databases using an `init-mongo.js` file with the following contents:
 
 ```js
