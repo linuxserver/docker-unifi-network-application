@@ -30,8 +30,8 @@ param_ports:
 
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run." }
-  - { env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run." }
+  - { env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**" }
+  - { env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**." }
   - { env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run." }
   - { env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run." }
   - { env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run." }
