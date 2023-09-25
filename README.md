@@ -59,9 +59,9 @@ The architectures supported by this image are:
 
 ## Application Setup
 
-### This container requires an external mongodb database instance.
+After setup, the web UI is available at https://ip:8443. The application can be configured, or a backup restored, using the first run wizard.
 
-The web UI is at https://ip:8443, setup with the first run wizard.
+**This container requires an external mongodb database instance.**
 
 ### Setting Up Your External Database
 
@@ -78,14 +78,21 @@ db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO
 
 Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
 
+For example:
+
 ```yaml
-volumes:
-  - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+  unifi-db:
+    image: docker.io/mongo:<version tag>
+    container_name: unifi-db
+    volumes:
+      - /path/to/data:/data/db
+      - /path/to/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: unless-stopped
 ```
 
 *Note that the init script method will only work on first run. If you start the mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
 
-*If you are using the init script method do not also set `MONGO_INITDB_ROOT_USERNAME` or `MONGO_INITDB_ROOT_PASSWORD` values as they will cause conflicts.*
+*If you are using the init script method do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts.*
 
 You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
 
