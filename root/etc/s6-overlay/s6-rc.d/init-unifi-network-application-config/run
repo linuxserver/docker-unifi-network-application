@@ -23,7 +23,7 @@ if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
         sleep infinity
-    elif ! nc -w1 "${MONGO_HOST}" ${MONGO_PORT}; then
+    elif ! nc -w1 "${MONGO_HOST}" ${MONGO_PORT} >/dev/null 2>&1; then
         echo "*** Defined MONGO_HOST is not reachable, cannot proceed. ***"
         sleep infinity
     else
