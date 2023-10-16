@@ -23,6 +23,9 @@ if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
         exit 1
+    elif ! nc -w1 "${MONGO_HOST}" ${MONGO_PORT}; then
+        echo "*** Defined MONGO_HOST is not reachable, cannot proceed. ***"
+        exit 1
     else
         sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties
         sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties
