@@ -32,6 +32,16 @@ if [[ ! -e /config/data/system.properties ]]; then
         sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties
         sed -i "s/~MONGO_DBNAME~/${MONGO_DBNAME}/" /defaults/system.properties
         sed -i "s/~MONGO_PASS~/${MONGO_PASS}/" /defaults/system.properties
+        if [[ "${MONGO_TLS,,}" = "true" ]]; then
+            sed -i "s/~MONGO_TLS~/true/" /defaults/system.properties
+        else
+            sed -i "s/~MONGO_TLS~/false/" /defaults/system.properties
+        fi
+        if [[ -z "${MONGO_AUTHSOURCE}" ]]; then
+            sed -i "s/~MONGO_AUTHSOURCE~/${MONGO_DBNAME}/" /defaults/system.properties
+        else
+            sed -i "s/~MONGO_AUTHSOURCE~/${MONGO_AUTHSOURCE}/" /defaults/system.properties
+        fi
         cp /defaults/system.properties /config/data
     fi
 fi
