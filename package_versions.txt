@@ -272,7 +272,7 @@ netcat                                    1.218-4ubuntu1                        
 netcat-openbsd                            1.218-4ubuntu1                           deb           
 openjdk-17-jre-headless                   17.0.8.1+1~us1-0ubuntu1~22.04            deb           
 openssh                                   1.0                                      java-archive  
-openssl                                   3.0.2-0ubuntu1.10                        deb           
+openssl                                   3.0.2-0ubuntu1.12                        deb           
 org.eclipse.paho.client.mqttv3            1.1.0                                    java-archive  
 owasp-java-html-sanitizer                 20190503.1                               java-archive  
 passwd                                    1:4.8.1-2ubuntu2.1                       deb           
