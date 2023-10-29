@@ -23,10 +23,20 @@ if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
         sleep infinity
-    elif ! nc -w1 "${MONGO_HOST}" ${MONGO_PORT} >/dev/null 2>&1; then
-        echo "*** Defined MONGO_HOST is not reachable, cannot proceed. ***"
-        sleep infinity
     else
+        echo "*** Waiting for MONGO_HOST ${MONGO_HOST} to be reachable. ***"
+        DBCOUNT=0
+        while true; do
+            if nc -w1 "${MONGO_HOST}" "${MONGO_PORT}" >/dev/null 2>&1; then
+                break
+            fi
+            DBCOUNT=$((DBCOUNT+1))
+            if [[ ${DBCOUNT} -gt 6 ]]; then
+                echo "*** Defined MONGO_HOST ${MONGO_HOST} is not reachable, cannot proceed. ***"
+                sleep infinity
+            fi
+            sleep 5
+        done
         sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties
         sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties
         sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties
