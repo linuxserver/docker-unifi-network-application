@@ -71,7 +71,8 @@ Formally only mongodb 3.6 through 4.4 are supported, however, it has been report
 If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your user using an `init-mongo.js` file with the following contents:
 
 ```js
-db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}, {role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
+db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
+db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
 ```
 
 Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
