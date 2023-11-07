@@ -59,7 +59,6 @@ ecj                                       3.18.0                                
 eddsa                                     0.2.0                                    java-archive  
 error_prone_annotations                   2.7.1                                    java-archive  
 failureaccess                             1.0.1                                    java-archive  
-findbugsAnnotations                       3.0.1                                    java-archive  
 findutils                                 4.8.0-1ubuntu3                           deb           
 fontconfig-config                         2.13.1-4.2ubuntu5                        deb           
 fonts-dejavu-core                         2.37-2build1                             deb           
