@@ -3,6 +3,7 @@
 
 # create our folders
 mkdir -p \
+    /run/unifi/work/ROOT \
     /config/{data,logs}
 
 # create symlinks for config
@@ -18,6 +19,13 @@ for i in "${symlinks[@]}"; do
         ln -s /config/"$(basename "$i")" "$i"
     fi
 done
+
+if [[ -L "/usr/lib/unifi/run" && ! "/usr/lib/unifi/run" -ef "/run/unifi"  ]]; then
+    unlink "/usr/lib/unifi/run"
+fi
+if [[ ! -L "/usr/lib/unifi/run" ]]; then
+    ln -s "/run/unifi" "/usr/lib/unifi/run"
+fi
 
 if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
