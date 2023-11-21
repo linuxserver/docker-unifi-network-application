@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/linuxserver/baseimage-alpine:3.18
+FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
 
 # set version label
 ARG BUILD_DATE
@@ -10,14 +10,17 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="thespad"
 
 # environment settings
-ARG UNIFI_BRANCH="stable"
+ARG UNIFI_BRANCH="stable" \
+DEBIAN_FRONTEND="noninteractive"
 
 RUN \
   echo "**** install packages ****" && \
-  apk add --no-cache \
+  apt-get update && \
+  apt-get install --no-install-recommends -y \
     jsvc \
     logrotate \
-    openjdk17-jre-headless && \
+    openjdk-17-jre-headless \
+    unzip && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET http://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
@@ -32,8 +35,11 @@ RUN \
   unzip /tmp/unifi.zip -d /usr/lib && \
   mv /usr/lib/UniFi /usr/lib/unifi && \
   echo "**** cleanup ****" && \
+  apt-get clean && \
   rm -rf \
-    /tmp/*
+    /tmp/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
 
 # add local files
 COPY root/ /
