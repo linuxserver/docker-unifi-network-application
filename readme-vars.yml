@@ -41,8 +41,8 @@ opt_param_usage_include_env: true
 opt_param_env_vars:
   - { env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default" }
   - { env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default" }
-  - { env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable TLS. Only evaluated on first run." }
-  - { env_var: "MONGO_AUTHSOURCE", env_value: "", desc: "Mongodb authSource. For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run." }
+  - { env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run." }
+  - { env_var: "MONGO_AUTHSOURCE", env_value: "", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run." }
 
 opt_param_usage_include_ports: true
 opt_param_ports:
