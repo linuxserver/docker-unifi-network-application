@@ -46,7 +46,7 @@ compiler                                  0.9.6                                 
 coreutils                                 8.32-4.1ubuntu1                          deb           
 cron                                      3.0pl1-137ubuntu3                        deb           
 cron4j                                    2.2.5                                    java-archive  
-curl                                      7.81.0-1ubuntu1.14                       deb           
+curl                                      7.81.0-1ubuntu1.15                       deb           
 dash                                      0.5.11+git20210903+057cd650a4ed-3build1  deb           
 debconf                                   1.5.79ubuntu1                            deb           
 debianutils                               5.5-1ubuntu2                             deb           
@@ -167,7 +167,7 @@ libcrypt1                                 1:4.4.27-1                            
 libctf-nobfd0                             2.38-4ubuntu2.4                          deb           
 libctf0                                   2.38-4ubuntu2.4                          deb           
 libcups2                                  2.4.1op1-1ubuntu4.7                      deb           
-libcurl4                                  7.81.0-1ubuntu1.14                       deb           
+libcurl4                                  7.81.0-1ubuntu1.15                       deb           
 libdb5.3                                  5.3.28+dfsg1-0.8ubuntu3                  deb           
 libdbus-1-3                               1.12.20-2ubuntu4.1                       deb           
 libdebconfclient0                         0.261ubuntu1                             deb           
@@ -249,7 +249,7 @@ libunistring2                             1.0-1                                 
 libuuid1                                  2.37.2-4ubuntu3                          deb           
 libxxhash0                                0.8.1-1                                  deb           
 libzstd1                                  1.4.8+dfsg-3build1                       deb           
-locales                                   2.35-0ubuntu3.4                          deb           
+locales                                   2.35-0ubuntu3.5                          deb           
 log4j-api                                 2.17.2                                   java-archive  
 log4j-to-slf4j                            2.17.2                                   java-archive  
 logback-access                            1.2.11                                   java-archive  
@@ -328,7 +328,7 @@ txw2                                      2.3.0.1                               
 tzdata                                    2023c-0ubuntu0.22.04.2                   deb           
 ubuntu-keyring                            2021.03.26                               deb           
 ucf                                       3.0043                                   deb           
-unifi                                     8.0.7-24256-1                            deb           
+unifi                                     8.0.24-24385-1                           deb           
 urlrewritefilter                          4.0.4                                    java-archive  
 usrmerge                                  25ubuntu2                                deb           
 util-linux                                2.37.2-4ubuntu3                          deb           
