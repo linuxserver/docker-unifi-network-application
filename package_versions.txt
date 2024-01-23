@@ -249,7 +249,7 @@ libunistring2                             1.0-1                                 
 libuuid1                                  2.37.2-4ubuntu3                          deb           
 libxxhash0                                0.8.1-1                                  deb           
 libzstd1                                  1.4.8+dfsg-3build1                       deb           
-locales                                   2.35-0ubuntu3.5                          deb           
+locales                                   2.35-0ubuntu3.6                          deb           
 log4j-api                                 2.17.2                                   java-archive  
 log4j-to-slf4j                            2.17.2                                   java-archive  
 logback-access                            1.2.11                                   java-archive  
@@ -325,7 +325,7 @@ tomcat-embed-jasper                       9.0.65                                
 tomcat-embed-programmatic                 9.0.65                                   java-archive  
 tomcat-embed-websocket                    9.0.65                                   java-archive  
 txw2                                      2.3.0.1                                  java-archive  
-tzdata                                    2023c-0ubuntu0.22.04.2                   deb           
+tzdata                                    2023d-0ubuntu0.22.04                     deb           
 ubuntu-keyring                            2021.03.26                               deb           
 ucf                                       3.0043                                   deb           
 unifi                                     8.0.26-24388-1                           deb           
