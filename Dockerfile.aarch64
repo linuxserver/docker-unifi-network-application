@@ -10,18 +10,17 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="thespad"
 
 # environment settings
-ARG UNIFI_BRANCH="stable"
-ARG DEBIAN_FRONTEND="noninteractive"
+ARG UNIFI_BRANCH="stable" \
+DEBIAN_FRONTEND="noninteractive"
 
 RUN \
   echo "**** install packages ****" && \
   apt-get update && \
-  apt-get install -y --no-install-recommends \
-    binutils \
+  apt-get install --no-install-recommends -y \
     jsvc \
-    libcap2 \
     logrotate \
-    openjdk-17-jre-headless && \
+    openjdk-17-jre-headless \
+    unzip && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET http://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
@@ -31,9 +30,10 @@ RUN \
   fi && \
   mkdir -p /app && \
   curl -o \
-  /tmp/unifi.deb -L \
-    "https://dl.ui.com/unifi/${UNIFI_VERSION}/unifi_sysvinit_all.deb" && \
-  dpkg -i --ignore-depends=mongodb-org-server /tmp/unifi.deb && \
+  /tmp/unifi.zip -L \
+    "https://dl.ui.com/unifi/${UNIFI_VERSION}/UniFi.unix.zip" && \
+  unzip /tmp/unifi.zip -d /usr/lib && \
+  mv /usr/lib/UniFi /usr/lib/unifi && \
   echo "**** cleanup ****" && \
   apt-get clean && \
   rm -rf \
