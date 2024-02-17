@@ -147,11 +147,12 @@ services:
       - TZ=Etc/UTC
       - MONGO_USER=unifi
       - MONGO_PASS=
-      - MONGO_HOST=unifi-db
-      - MONGO_PORT=27017
+      - MONGO_HOST=unifi-db[,unifi-db2[,unifi-db3]]
+      - MONGO_PORT=27017[,27017[,27017]]
       - MONGO_DBNAME=unifi
       - MEM_LIMIT=1024 #optional
       - MEM_STARTUP=1024 #optional
+      - MONGO_REPLICASET= #optional
       - MONGO_TLS= #optional
       - MONGO_AUTHSOURCE= #optional
     volumes:
@@ -179,11 +180,12 @@ docker run -d \
   -e TZ=Etc/UTC \
   -e MONGO_USER=unifi \
   -e MONGO_PASS= \
-  -e MONGO_HOST=unifi-db \
-  -e MONGO_PORT=27017 \
+  -e MONGO_HOST=unifi-db[,unifi-db2[,unifi-db3]] \
+  -e MONGO_PORT=27017[,27017[,27017]] \
   -e MONGO_DBNAME=unifi \
   -e MEM_LIMIT=1024 `#optional` \
   -e MEM_STARTUP=1024 `#optional` \
+  -e MONGO_REPLICASET= `#optional` \
   -e MONGO_TLS= `#optional` \
   -e MONGO_AUTHSOURCE= `#optional` \
   -p 8443:8443 \
@@ -220,11 +222,12 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `-e TZ=Etc/UTC` | specify a timezone to use, see this [list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). |
 | `-e MONGO_USER=unifi` | Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**. |
 | `-e MONGO_PASS=` | Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**. |
-| `-e MONGO_HOST=unifi-db` | Mongodb Hostname. Only evaluated on first run. |
-| `-e MONGO_PORT=27017` | Mongodb Port. Only evaluated on first run. |
+| `-e MONGO_HOST=unifi-db[,unifi-db2[,unifi-db3]]` | Mongodb Hostname (multiple hosts separated with comma allowed if MONGO_REPLICASET is set). Only evaluated on first run. |
+| `-e MONGO_PORT=27017[,27017[,27017]]` | Mongodb Port (multiple ports separated with comma allowed if MONGO_REPLICASET is set). Only evaluated on first run. |
 | `-e MONGO_DBNAME=unifi` | Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run. |
 | `-e MEM_LIMIT=1024` | Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default |
 | `-e MEM_STARTUP=1024` | Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default |
+| `-e MONGO_REPLICASET=` | Name of Mongodb (existing) [replicaset](https://www.mongodb.com/docs/manual/reference/connection-string/#replica-set-option).  Only evaluated on first run. |
 | `-e MONGO_TLS=` | Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run. |
 | `-e MONGO_AUTHSOURCE=` | Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run. |
 | `-v /config` | All Unifi data stored here |
@@ -391,5 +394,6 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 ## Versions
 
 * **04.03.24:** - Install from zip package instead of deb.
+* **17.02.24:** - Add environment variables for replicaSet.
 * **17.10.23:** - Add environment variables for TLS and authSource to support Atlas and new MongoDB versions.
 * **05.09.23:** - Initial release.

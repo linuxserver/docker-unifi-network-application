@@ -33,7 +33,7 @@ param_env_vars:
   - { env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**." }
   - { env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**." }
   - { env_var: "MONGO_HOST", env_value: "unifi-db[,unifi-db2[,unifi-db3]]", desc: "Mongodb Hostname (multiple hosts separated with comma allowed if MONGO_REPLICASET is set). Only evaluated on first run." }
-  - { env_var: "MONGO_PORT", env_value: "27017[,unifi-db2 port[,unifi-db3 port]]", desc: "Mongodb Port (multiple ports separated with comma allowed if MONGO_REPLICASET is set). Only evaluated on first run." }
+  - { env_var: "MONGO_PORT", env_value: "27017[,27017[,27017]]", desc: "Mongodb Port (multiple ports separated with comma allowed if MONGO_REPLICASET is set). Only evaluated on first run." }
   - { env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run." }
 
 # optional container parameters
@@ -41,7 +41,7 @@ opt_param_usage_include_env: true
 opt_param_env_vars:
   - { env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default" }
   - { env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default" }
-  - { env_var: "MONGO_REPLICASET", env_value: "", desc: "Name of Mongodb [replicaset](https://www.mongodb.com/docs/manual/reference/connection-string/#replica-set-option).  Only evaluated on first run." }
+  - { env_var: "MONGO_REPLICASET", env_value: "", desc: "Name of Mongodb (existing) [replicaset](https://www.mongodb.com/docs/manual/reference/connection-string/#replica-set-option).  Only evaluated on first run." }
   - { env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run." }
   - { env_var: "MONGO_AUTHSOURCE", env_value: "", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run." }
 
