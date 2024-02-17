@@ -20,6 +20,28 @@ for i in "${symlinks[@]}"; do
     fi
 done
 
+function probe()
+{
+    HOST=$1
+    PORT=$2
+    DBCOUNT=0
+    RETVAL=0
+    while true; do
+        
+        if nc -w1 "${HOST}" "${PORT}" >/dev/null 2>&1; then
+            break
+        fi
+        DBCOUNT=$((DBCOUNT+1))
+        if [[ ${DBCOUNT} -gt 6 ]]; then
+            RETVAL=1
+            break
+        fi
+        sleep 5
+    done
+
+    echo $RETVAL
+}
+
 if [[ -L "/usr/lib/unifi/run" && ! "/usr/lib/unifi/run" -ef "/run/unifi"  ]]; then
     unlink "/usr/lib/unifi/run"
 fi
@@ -28,40 +50,82 @@ if [[ ! -L "/usr/lib/unifi/run" ]]; then
 fi
 
 if [[ ! -e /config/data/system.properties ]]; then
+
+    cp -f /defaults/system.properties /defaults/system.properties.tmp
+    
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
         sleep infinity
     else
-        echo "*** Waiting for MONGO_HOST ${MONGO_HOST} to be reachable. ***"
-        DBCOUNT=0
-        while true; do
-            if nc -w1 "${MONGO_HOST}" "${MONGO_PORT}" >/dev/null 2>&1; then
-                break
-            fi
-            DBCOUNT=$((DBCOUNT+1))
-            if [[ ${DBCOUNT} -gt 6 ]]; then
-                echo "*** Defined MONGO_HOST ${MONGO_HOST} is not reachable, cannot proceed. ***"
+        if [[ -z "${MONGO_REPLICASET}" ]]; then
+
+            # Connect to stand alone instance
+            echo "*** Waiting for MONGO_HOST ${MONGO_HOST} to be reachable. ***"
+            
+            if [ $(probe "${MONGO_HOST}" "${MONGO_PORT}") == "1" ]; then
+
+                echo "*** Defined MONGO_HOST ${MONGO_HOST} is not reachable on port ${MONGO_PORT}, cannot proceed. ***"
+
                 sleep infinity
             fi
-            sleep 5
-        done
-        sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties
-        sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties
-        sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties
-        sed -i "s/~MONGO_DBNAME~/${MONGO_DBNAME}/" /defaults/system.properties
-        sed -i "s/~MONGO_PASS~/${MONGO_PASS}/" /defaults/system.properties
-        if [[ "${MONGO_TLS,,}" = "true" ]]; then
-            sed -i "s/~MONGO_TLS~/true/" /defaults/system.properties
+
+            sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties.tmp
+            sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties.tmp
+            sed -i "s/~MONGO_REPLICASET~//" /defaults/system.properties.tmp
         else
-            sed -i "s/~MONGO_TLS~/false/" /defaults/system.properties
+
+            # Connect to replicaset. Read host/port as comma separated 
+            IFS=',' read -ra HOSTS <<< "$MONGO_HOST"
+            IFS=',' read -ra PORTS <<< "$MONGO_PORT"
+
+            # Compare lengths
+            HL=${#HOSTS[@]}
+            PL=${#PORTS[@]}
+
+            if [[ $HL -ne $PL ]]; then
+                echo "*** Defined replicaset MONGO_HOST(s) does not match length of MONGO_PORT(s), cannot proceed. ***"
+                sleep infinity
+            fi
+
+            NODES=""
+            # Probe each node
+            for (( i=0; i<$HL; i++ )); do 
+
+                echo "*** Waiting for MONGO_HOST ${HOSTS[$i]} to be reachable. ***"
+
+                if [ $(probe "${HOSTS[$i]}" "${PORTS[$i]}") == "1" ]; then
+                    echo "*** Defined MONGO_HOST ${HOSTS[$i]} is not reachable on port ${PORTS[$i]}, cannot proceed. ***"
+
+                    sleep infinity
+                fi
+
+                if [[ ! -z "${NODES}" ]]; then
+                    NODES+=",";
+                fi
+                NODES+="${HOSTS[$i]}:${PORTS[$i]}"
+            done
+
+            sed -i "s/~MONGO_REPLICASET~/\&replicaSet=${MONGO_REPLICASET}/" /defaults/system.properties.tmp
+            sed -i "s/~MONGO_HOST~:~MONGO_PORT~/${NODES}/" /defaults/system.properties.tmp
+        fi
+
+        sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties.tmp
+        sed -i "s/~MONGO_DBNAME~/${MONGO_DBNAME}/" /defaults/system.properties.tmp
+        sed -i "s/~MONGO_PASS~/${MONGO_PASS}/" /defaults/system.properties.tmp
+        if [[ "${MONGO_TLS,,}" = "true" ]]; then
+            sed -i "s/~MONGO_TLS~/true/" /defaults/system.properties.tmp
+        else
+            sed -i "s/~MONGO_TLS~/false/" /defaults/system.properties.tmp
         fi
         if [[ -z "${MONGO_AUTHSOURCE}" ]]; then
-            sed -i "s/~MONGO_AUTHSOURCE~//" /defaults/system.properties
+            sed -i "s/~MONGO_AUTHSOURCE~//" /defaults/system.properties.tmp
         else
-            sed -i "s/~MONGO_AUTHSOURCE~/\&authSource=${MONGO_AUTHSOURCE}/" /defaults/system.properties
+            sed -i "s/~MONGO_AUTHSOURCE~/\&authSource=${MONGO_AUTHSOURCE}/" /defaults/system.properties.tmp
         fi
-        cp /defaults/system.properties /config/data
+        
     fi
+
+    mv /defaults/system.properties.tmp /config/data/system.properties
 fi
 
 # generate key
