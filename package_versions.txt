@@ -322,7 +322,7 @@ txw2                                      2.3.0.1                               
 tzdata                                    2023d-0ubuntu0.22.04                     deb           
 ubuntu-keyring                            2021.03.26                               deb           
 ucf                                       3.0043                                   deb           
-unzip                                     6.0-26ubuntu3.1                          deb           
+unzip                                     6.0-26ubuntu3.2                          deb           
 urlrewritefilter                          4.0.4                                    java-archive  
 usrmerge                                  25ubuntu2                                deb           
 util-linux                                2.37.2-4ubuntu3                          deb           
