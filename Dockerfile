@@ -10,7 +10,7 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="thespad"
 
 # environment settings
-ARG UNIFI_BRANCH="stable" \
+ARG UNIFI_BRANCH="stable"
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN \
