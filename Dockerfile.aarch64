@@ -23,7 +23,7 @@ RUN \
     unzip && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
-    UNIFI_VERSION=$(curl -sX GET http://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
+    UNIFI_VERSION=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
     |grep -A 7 -m 1 'Package: unifi' \
     | awk -F ': ' '/Version/{print $2;exit}' \
     | awk -F '-' '{print $1}'); \
