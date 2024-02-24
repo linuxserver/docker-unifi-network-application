@@ -20,7 +20,8 @@ RUN \
     jsvc \
     logrotate \
     openjdk-17-jre-headless \
-    unzip && \
+    unzip \
+    gettext && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages.gz \
