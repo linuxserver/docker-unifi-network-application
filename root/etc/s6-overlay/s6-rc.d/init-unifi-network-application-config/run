@@ -29,7 +29,7 @@ fi
 
 if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_URI}" || -z "${STAT_MONGO_URI}" || -z "${MONGO_DBNAME}" ]]; then
-        echo "*** Required environments are not set, cannot configure database settings. ***"
+        echo "*** Required environment variables are not set, cannot configure database settings. ***"
         sleep infinity
     else
         envsubst < /defaults/system.properties > /config/data/system.properties
