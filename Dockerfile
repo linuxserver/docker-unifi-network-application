@@ -11,7 +11,7 @@ LABEL maintainer="thespad"
 
 # environment settings
 ARG UNIFI_BRANCH="stable" \
-DEBIAN_FRONTEND="noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN \
   echo "**** install packages ****" && \
