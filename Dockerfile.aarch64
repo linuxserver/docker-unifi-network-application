@@ -11,7 +11,7 @@ LABEL maintainer="thespad"
 
 # environment settings
 ARG UNIFI_BRANCH="stable"
-ARG DEBIAN_FRONTEND="noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive"
 ARG ENVSUBST_VERSION=v1.4.2
 
 RUN \
