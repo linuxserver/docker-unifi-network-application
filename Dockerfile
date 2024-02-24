@@ -12,7 +12,6 @@ LABEL maintainer="thespad"
 # environment settings
 ARG UNIFI_BRANCH="stable"
 ENV DEBIAN_FRONTEND="noninteractive"
-ARG ENVSUBST_VERSION=v1.4.2
 
 RUN \
   echo "**** install packages ****" && \
@@ -21,10 +20,8 @@ RUN \
     jsvc \
     logrotate \
     openjdk-17-jre-headless \
-    unzip && \
-  curl -L https://github.com/a8m/envsubst/releases/download/${ENVSUBST_VERSION}/envsubst-`uname -s`-`uname -m` -o envsubst && \
-  chmod +x envsubst && \
-  mv envsubst /usr/local/bin && \
+    unzip \
+    gettext && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET http://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages \
