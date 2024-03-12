@@ -160,7 +160,7 @@ libcap2                                   1:2.44-1ubuntu0.22.04.1               
 libcom-err2                               1.46.5-2ubuntu1.1                        deb             
 libcommons-daemon-java                    1.0.15-8                                 deb             
 libcrypt1                                 1:4.4.27-1                               deb             
-libcups2                                  2.4.1op1-1ubuntu4.7                      deb             
+libcups2                                  2.4.1op1-1ubuntu4.8                      deb             
 libcurl4                                  7.81.0-1ubuntu1.15                       deb             
 libdb5.3                                  5.3.28+dfsg1-0.8ubuntu3                  deb             
 libdbus-1-3                               1.12.20-2ubuntu4.1                       deb             
@@ -319,7 +319,7 @@ tomcat-embed-jasper                       9.0.65                                
 tomcat-embed-programmatic                 9.0.65                                   java-archive    
 tomcat-embed-websocket                    9.0.65                                   java-archive    
 txw2                                      2.3.0.1                                  java-archive    
-tzdata                                    2023d-0ubuntu0.22.04                     deb             
+tzdata                                    2024a-0ubuntu0.22.04                     deb             
 ubuntu-keyring                            2021.03.26                               deb             
 ucf                                       3.0043                                   deb             
 unzip                                     6.0-26ubuntu3.2                          deb             
