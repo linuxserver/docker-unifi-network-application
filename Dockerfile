@@ -10,13 +10,14 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="thespad"
 
 # environment settings
-ARG UNIFI_BRANCH="stable" \
-DEBIAN_FRONTEND="noninteractive"
+ARG UNIFI_BRANCH="stable"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN \
   echo "**** install packages ****" && \
   apt-get update && \
   apt-get install --no-install-recommends -y \
+    gettext \
     jsvc \
     logrotate \
     openjdk-17-jre-headless \
