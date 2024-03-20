@@ -245,9 +245,11 @@ pipeline {
                   -v ${WORKSPACE}:/mnt \
                   -e AWS_ACCESS_KEY_ID=\"${S3_KEY}\" \
                   -e AWS_SECRET_ACCESS_KEY=\"${S3_SECRET}\" \
-                  ghcr.io/linuxserver/baseimage-alpine:3.17 s6-envdir -fn -- /var/run/s6/container_environment /bin/bash -c "\
-                    apk add --no-cache py3-pip && \
-                    pip install s3cmd && \
+                  ghcr.io/linuxserver/baseimage-alpine:3.19 s6-envdir -fn -- /var/run/s6/container_environment /bin/bash -c "\
+                    apk add --no-cache python3 && \
+                    python3 -m venv /lsiopy && \
+                    pip install --no-cache-dir -U pip && \
+                    pip install --no-cache-dir s3cmd && \
                     s3cmd put --no-preserve --acl-public -m text/xml /mnt/shellcheck-result.xml s3://ci-tests.linuxserver.io/${IMAGE}/${META_TAG}/shellcheck-result.xml" || :'''
         }
       }
@@ -262,150 +264,176 @@ pipeline {
         }
       }
       steps {
-        withCredentials([
-          [
-            $class: 'UsernamePasswordMultiBinding',
-            credentialsId: '3f9ba4d5-100d-45b0-a3c4-633fd6061207',
-            usernameVariable: 'DOCKERUSER',
-            passwordVariable: 'DOCKERPASS'
-          ]
-        ]) {
-          sh '''#! /bin/bash
-                set -e
-                TEMPDIR=$(mktemp -d)
-                docker pull ghcr.io/linuxserver/jenkins-builder:latest
-                docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=main -v ${TEMPDIR}:/ansible/jenkins ghcr.io/linuxserver/jenkins-builder:latest 
-                # Stage 1 - Jenkinsfile update
-                if [[ "$(md5sum Jenkinsfile | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile | awk '{ print $1 }')" ]]; then
-                  mkdir -p ${TEMPDIR}/repo
-                  git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
-                  cd ${TEMPDIR}/repo/${LS_REPO}
-                  git checkout -f main
-                  cp ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile ${TEMPDIR}/repo/${LS_REPO}/
-                  git add Jenkinsfile
-                  git commit -m 'Bot Updating Templated Files'
-                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
-                  echo "Updating Jenkinsfile"
-                  rm -Rf ${TEMPDIR}
-                  exit 0
-                else
-                  echo "Jenkinsfile is up to date."
+        sh '''#! /bin/bash
+              set -e
+              TEMPDIR=$(mktemp -d)
+              docker pull ghcr.io/linuxserver/jenkins-builder:latest
+              # Cloned repo paths for templating:
+              # ${TEMPDIR}/docker-${CONTAINER_NAME}: Cloned branch main of ${LS_USER}/${LS_REPO} for running the jenkins builder on
+              # ${TEMPDIR}/repo/${LS_REPO}: Cloned branch main of ${LS_USER}/${LS_REPO} for commiting various templated file changes and pushing back to Github
+              # ${TEMPDIR}/docs/docker-documentation: Cloned docs repo for pushing docs updates to Github
+              # ${TEMPDIR}/unraid/docker-templates: Cloned docker-templates repo to check for logos
+              # ${TEMPDIR}/unraid/templates: Cloned templates repo for commiting unraid template changes and pushing back to Github
+              git clone --branch main --depth 1 https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/docker-${CONTAINER_NAME}
+              docker run --rm -v ${TEMPDIR}/docker-${CONTAINER_NAME}:/tmp -e LOCAL=true ghcr.io/linuxserver/jenkins-builder:latest 
+              echo "Starting Stage 1 - Jenkinsfile update"
+              if [[ "$(md5sum Jenkinsfile | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile | awk '{ print $1 }')" ]]; then
+                mkdir -p ${TEMPDIR}/repo
+                git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
+                cd ${TEMPDIR}/repo/${LS_REPO}
+                git checkout -f main
+                cp ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile ${TEMPDIR}/repo/${LS_REPO}/
+                git add Jenkinsfile
+                git commit -m 'Bot Updating Templated Files'
+                git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                echo "Updating Jenkinsfile and exiting build, new one will trigger based on commit"
+                rm -Rf ${TEMPDIR}
+                exit 0
+              else
+                echo "Jenkinsfile is up to date."
+              fi
+              echo "Starting Stage 2 - Delete old templates"
+              OLD_TEMPLATES=".github/ISSUE_TEMPLATE.md .github/ISSUE_TEMPLATE/issue.bug.md .github/ISSUE_TEMPLATE/issue.feature.md .github/workflows/call_invalid_helper.yml .github/workflows/stale.yml Dockerfile.armhf"
+              for i in ${OLD_TEMPLATES}; do
+                if [[ -f "${i}" ]]; then
+                  TEMPLATES_TO_DELETE="${i} ${TEMPLATES_TO_DELETE}"
                 fi
-                # Stage 2 - Delete old templates
-                OLD_TEMPLATES=".github/ISSUE_TEMPLATE.md .github/ISSUE_TEMPLATE/issue.bug.md .github/ISSUE_TEMPLATE/issue.feature.md .github/workflows/call_invalid_helper.yml .github/workflows/stale.yml Dockerfile.armhf"
-                for i in ${OLD_TEMPLATES}; do
-                  if [[ -f "${i}" ]]; then
-                    TEMPLATES_TO_DELETE="${i} ${TEMPLATES_TO_DELETE}"
-                  fi
+              done
+              if [[ -n "${TEMPLATES_TO_DELETE}" ]]; then
+                mkdir -p ${TEMPDIR}/repo
+                git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
+                cd ${TEMPDIR}/repo/${LS_REPO}
+                git checkout -f main
+                for i in ${TEMPLATES_TO_DELETE}; do
+                  git rm "${i}"
                 done
-                if [[ -n "${TEMPLATES_TO_DELETE}" ]]; then
-                  mkdir -p ${TEMPDIR}/repo
-                  git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
-                  cd ${TEMPDIR}/repo/${LS_REPO}
-                  git checkout -f main
-                  for i in ${TEMPLATES_TO_DELETE}; do
-                    git rm "${i}"
-                  done
-                  git commit -m 'Bot Updating Templated Files'
-                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
-                  echo "Deleting old and deprecated templates"
-                  rm -Rf ${TEMPDIR}
-                  exit 0
-                else
-                  echo "No templates to delete"
-                fi
-                # Stage 3 - Update templates
-                CURRENTHASH=$(grep -hs ^ ${TEMPLATED_FILES} | md5sum | cut -c1-8)
+                git commit -m 'Bot Updating Templated Files'
+                git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                echo "Deleting old/deprecated templates and exiting build, new one will trigger based on commit"
+                rm -Rf ${TEMPDIR}
+                exit 0
+              else
+                echo "No templates to delete"
+              fi
+              echo "Starting Stage 3 - Update templates"
+              CURRENTHASH=$(grep -hs ^ ${TEMPLATED_FILES} | md5sum | cut -c1-8)
+              cd ${TEMPDIR}/docker-${CONTAINER_NAME}
+              NEWHASH=$(grep -hs ^ ${TEMPLATED_FILES} | md5sum | cut -c1-8)
+              if [[ "${CURRENTHASH}" != "${NEWHASH}" ]] || ! grep -q '.jenkins-external' "${WORKSPACE}/.gitignore" 2>/dev/null; then
+                mkdir -p ${TEMPDIR}/repo
+                git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
+                cd ${TEMPDIR}/repo/${LS_REPO}
+                git checkout -f main
                 cd ${TEMPDIR}/docker-${CONTAINER_NAME}
-                NEWHASH=$(grep -hs ^ ${TEMPLATED_FILES} | md5sum | cut -c1-8)
-                if [[ "${CURRENTHASH}" != "${NEWHASH}" ]] || ! grep -q '.jenkins-external' "${WORKSPACE}/.gitignore" 2>/dev/null; then
-                  mkdir -p ${TEMPDIR}/repo
-                  git clone https://github.com/${LS_USER}/${LS_REPO}.git ${TEMPDIR}/repo/${LS_REPO}
-                  cd ${TEMPDIR}/repo/${LS_REPO}
-                  git checkout -f main
-                  cd ${TEMPDIR}/docker-${CONTAINER_NAME}
-                  mkdir -p ${TEMPDIR}/repo/${LS_REPO}/.github/workflows
-                  mkdir -p ${TEMPDIR}/repo/${LS_REPO}/.github/ISSUE_TEMPLATE
-                  cp --parents ${TEMPLATED_FILES} ${TEMPDIR}/repo/${LS_REPO}/ || :
-                  cp --parents readme-vars.yml ${TEMPDIR}/repo/${LS_REPO}/ || :
-                  cd ${TEMPDIR}/repo/${LS_REPO}/
-                  if ! grep -q '.jenkins-external' .gitignore 2>/dev/null; then
-                    echo ".jenkins-external" >> .gitignore
-                    git add .gitignore
-                  fi
-                  git add readme-vars.yml ${TEMPLATED_FILES}
-                  git commit -m 'Bot Updating Templated Files'
-                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
-                  echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                mkdir -p ${TEMPDIR}/repo/${LS_REPO}/.github/workflows
+                mkdir -p ${TEMPDIR}/repo/${LS_REPO}/.github/ISSUE_TEMPLATE
+                cp --parents ${TEMPLATED_FILES} ${TEMPDIR}/repo/${LS_REPO}/ || :
+                cp --parents readme-vars.yml ${TEMPDIR}/repo/${LS_REPO}/ || :
+                cd ${TEMPDIR}/repo/${LS_REPO}/
+                if ! grep -q '.jenkins-external' .gitignore 2>/dev/null; then
+                  echo ".jenkins-external" >> .gitignore
+                  git add .gitignore
+                fi
+                git add readme-vars.yml ${TEMPLATED_FILES}
+                git commit -m 'Bot Updating Templated Files'
+                git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/${LS_USER}/${LS_REPO}.git main
+                echo "true" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                echo "Updating templates and exiting build, new one will trigger based on commit"
+                rm -Rf ${TEMPDIR}
+                exit 0
+              else
+                echo "false" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                echo "No templates to update"
+              fi
+              echo "Starting Stage 4 - External repo updates: Docs, Unraid Template and Readme Sync to Docker Hub"
+              mkdir -p ${TEMPDIR}/docs
+              git clone https://github.com/linuxserver/docker-documentation.git ${TEMPDIR}/docs/docker-documentation
+              if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}"  ]] && [[ (! -f ${TEMPDIR}/docs/docker-documentation/docs/images/docker-${CONTAINER_NAME}.md) || ("$(md5sum ${TEMPDIR}/docs/docker-documentation/docs/images/docker-${CONTAINER_NAME}.md | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/docker-${CONTAINER_NAME}.md | awk '{ print $1 }')") ]]; then
+                cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/docker-${CONTAINER_NAME}.md ${TEMPDIR}/docs/docker-documentation/docs/images/
+                cd ${TEMPDIR}/docs/docker-documentation
+                GH_DOCS_DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch:" | sed 's|.*HEAD branch: ||')
+                git add docs/images/docker-${CONTAINER_NAME}.md
+                echo "Updating docs repo"
+                git commit -m 'Bot Updating Documentation'
+                git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH} --rebase
+                git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH} || \
+                  (MAXWAIT="10" && echo "Push to docs failed, trying again in ${MAXWAIT} seconds" && \
+                  sleep $((RANDOM % MAXWAIT)) && \
+                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH} --rebase && \
+                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH})
+              else
+                echo "Docs update not needed, skipping"
+              fi
+              mkdir -p ${TEMPDIR}/unraid
+              git clone https://github.com/linuxserver/docker-templates.git ${TEMPDIR}/unraid/docker-templates
+              git clone https://github.com/linuxserver/templates.git ${TEMPDIR}/unraid/templates
+              if [[ -f ${TEMPDIR}/unraid/docker-templates/linuxserver.io/img/${CONTAINER_NAME}-logo.png ]]; then
+                sed -i "s|master/linuxserver.io/img/linuxserver-ls-logo.png|master/linuxserver.io/img/${CONTAINER_NAME}-logo.png|" ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml
+              elif [[ -f ${TEMPDIR}/unraid/docker-templates/linuxserver.io/img/${CONTAINER_NAME}-icon.png ]]; then
+                sed -i "s|master/linuxserver.io/img/linuxserver-ls-logo.png|master/linuxserver.io/img/${CONTAINER_NAME}-icon.png|" ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml
+              fi
+              if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}" ]] && [[ (! -f ${TEMPDIR}/unraid/templates/unraid/${CONTAINER_NAME}.xml) || ("$(md5sum ${TEMPDIR}/unraid/templates/unraid/${CONTAINER_NAME}.xml | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml | awk '{ print $1 }')") ]]; then
+                echo "Updating Unraid template"
+                cd ${TEMPDIR}/unraid/templates/
+                GH_TEMPLATES_DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch:" | sed 's|.*HEAD branch: ||')
+                if grep -wq "${CONTAINER_NAME}" ${TEMPDIR}/unraid/templates/unraid/ignore.list; then
+                  echo "Image is on the ignore list, marking Unraid template as deprecated"
+                  cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml ${TEMPDIR}/unraid/templates/unraid/
+                  git add -u unraid/${CONTAINER_NAME}.xml
+                  git mv unraid/${CONTAINER_NAME}.xml unraid/deprecated/${CONTAINER_NAME}.xml || :
+                  git commit -m 'Bot Moving Deprecated Unraid Template' || :
                 else
-                  echo "false" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
+                  cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml ${TEMPDIR}/unraid/templates/unraid/
+                  git add unraid/${CONTAINER_NAME}.xml
+                  git commit -m 'Bot Updating Unraid Template'
                 fi
-                mkdir -p ${TEMPDIR}/docs
-                git clone https://github.com/linuxserver/docker-documentation.git ${TEMPDIR}/docs/docker-documentation
-                if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}"  ]] && [[ (! -f ${TEMPDIR}/docs/docker-documentation/docs/images/docker-${CONTAINER_NAME}.md) || ("$(md5sum ${TEMPDIR}/docs/docker-documentation/docs/images/docker-${CONTAINER_NAME}.md | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/docker-${CONTAINER_NAME}.md | awk '{ print $1 }')") ]]; then
-                  cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/docker-${CONTAINER_NAME}.md ${TEMPDIR}/docs/docker-documentation/docs/images/
-                  cd ${TEMPDIR}/docs/docker-documentation
-                  GH_DOCS_DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch:" | sed 's|.*HEAD branch: ||')
-                  git add docs/images/docker-${CONTAINER_NAME}.md
-                  git commit -m 'Bot Updating Documentation'
-                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH}
-                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/docker-documentation.git ${GH_DOCS_DEFAULT_BRANCH}
+                git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH} --rebase
+                git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH} || \
+                  (MAXWAIT="10" && echo "Push to unraid templates failed, trying again in ${MAXWAIT} seconds" && \
+                  sleep $((RANDOM % MAXWAIT)) && \
+                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH} --rebase && \
+                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH})
+              else
+                echo "No updates to Unraid template needed, skipping"
+              fi
+              if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}" ]]; then
+                if [[ $(cat ${TEMPDIR}/docker-${CONTAINER_NAME}/README.md | wc -m) -gt 25000 ]]; then
+                  echo "Readme is longer than 25,000 characters. Syncing the lite version to Docker Hub"
+                  DH_README_SYNC_PATH="${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/README.lite"
+                else
+                  echo "Syncing readme to Docker Hub"
+                  DH_README_SYNC_PATH="${TEMPDIR}/docker-${CONTAINER_NAME}/README.md"
                 fi
-                mkdir -p ${TEMPDIR}/unraid
-                git clone https://github.com/linuxserver/docker-templates.git ${TEMPDIR}/unraid/docker-templates
-                git clone https://github.com/linuxserver/templates.git ${TEMPDIR}/unraid/templates
-                if [[ -f ${TEMPDIR}/unraid/docker-templates/linuxserver.io/img/${CONTAINER_NAME}-logo.png ]]; then
-                  sed -i "s|master/linuxserver.io/img/linuxserver-ls-logo.png|master/linuxserver.io/img/${CONTAINER_NAME}-logo.png|" ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml
-                elif [[ -f ${TEMPDIR}/unraid/docker-templates/linuxserver.io/img/${CONTAINER_NAME}-icon.png ]]; then
-                  sed -i "s|master/linuxserver.io/img/linuxserver-ls-logo.png|master/linuxserver.io/img/${CONTAINER_NAME}-icon.png|" ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml
-                fi
-                if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}" ]] && [[ (! -f ${TEMPDIR}/unraid/templates/unraid/${CONTAINER_NAME}.xml) || ("$(md5sum ${TEMPDIR}/unraid/templates/unraid/${CONTAINER_NAME}.xml | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml | awk '{ print $1 }')") ]]; then
-                  cd ${TEMPDIR}/unraid/templates/
-                  GH_TEMPLATES_DEFAULT_BRANCH=$(git remote show origin | grep "HEAD branch:" | sed 's|.*HEAD branch: ||')
-                  if grep -wq "${CONTAINER_NAME}" ${TEMPDIR}/unraid/templates/unraid/ignore.list; then
-                    echo "Image is on the ignore list, marking Unraid template as deprecated"
-                    cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml ${TEMPDIR}/unraid/templates/unraid/
-                    git add -u unraid/${CONTAINER_NAME}.xml
-                    git mv unraid/${CONTAINER_NAME}.xml unraid/deprecated/${CONTAINER_NAME}.xml || :
-                    git commit -m 'Bot Moving Deprecated Unraid Template' || :
-                  else
-                    cp ${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/${CONTAINER_NAME}.xml ${TEMPDIR}/unraid/templates/unraid/
-                    git add unraid/${CONTAINER_NAME}.xml
-                    git commit -m 'Bot Updating Unraid Template'
-                  fi
-                  git pull https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH}
-                  git push https://LinuxServer-CI:${GITHUB_TOKEN}@github.com/linuxserver/templates.git ${GH_TEMPLATES_DEFAULT_BRANCH}
-                fi
-                # Stage 4 - Sync Readme to Docker Hub
-                if [[ "${BRANCH_NAME}" == "${GH_DEFAULT_BRANCH}" ]]; then
-                  if [[ $(cat ${TEMPDIR}/docker-${CONTAINER_NAME}/README.md | wc -m) > 25000 ]]; then
-                    echo "Readme is longer than 25,000 characters. Syncing the lite version to Docker Hub"
-                    DH_README_SYNC_PATH="${TEMPDIR}/docker-${CONTAINER_NAME}/.jenkins-external/README.lite"
-                  else
-                    echo "Syncing readme to Docker Hub"
-                    DH_README_SYNC_PATH="${TEMPDIR}/docker-${CONTAINER_NAME}/README.md"
-                  fi
-                  DH_TOKEN=$(curl -d '{"username":"'${DOCKERUSER}'", "password":"'${DOCKERHUB_TOKEN}'"}' -H "Content-Type: application/json" -X POST https://hub.docker.com/v2/users/login | jq -r '.token')
+                if curl -s https://hub.docker.com/v2/namespaces/${DOCKERHUB_IMAGE%%/*}/repositories/${DOCKERHUB_IMAGE##*/}/tags | jq -r '.message' | grep -q 404; then
+                  echo "Docker Hub endpoint doesn't exist. Creating endpoint first."
+                  DH_TOKEN=$(curl -d '{"username":"linuxserverci", "password":"'${DOCKERHUB_TOKEN}'"}' -H "Content-Type: application/json" -X POST https://hub.docker.com/v2/users/login | jq -r '.token')
                   curl -s \
                     -H "Authorization: JWT ${DH_TOKEN}" \
                     -H "Content-Type: application/json" \
-                    -X PATCH \
-                    -d "{\\"full_description\\":$(jq -Rsa . ${DH_README_SYNC_PATH})}" \
-                    https://hub.docker.com/v2/repositories/${DOCKERHUB_IMAGE} || :
-                else
-                  echo "Not the default Github branch. Skipping readme sync to Docker Hub."
+                    -X POST \
+                    -d '{"name":"'${DOCKERHUB_IMAGE##*/}'", "namespace":"'${DOCKERHUB_IMAGE%%/*}'"}' \
+                    https://hub.docker.com/v2/repositories/ || :
                 fi
-                rm -Rf ${TEMPDIR}'''
-          script{
-            env.FILES_UPDATED = sh(
-              script: '''cat /tmp/${COMMIT_SHA}-${BUILD_NUMBER}''',
-              returnStdout: true).trim()
-          }
+                DH_TOKEN=$(curl -d '{"username":"linuxserverci", "password":"'${DOCKERHUB_TOKEN}'"}' -H "Content-Type: application/json" -X POST https://hub.docker.com/v2/users/login | jq -r '.token')
+                curl -s \
+                  -H "Authorization: JWT ${DH_TOKEN}" \
+                  -H "Content-Type: application/json" \
+                  -X PATCH \
+                  -d "{\\"full_description\\":$(jq -Rsa . ${DH_README_SYNC_PATH})}" \
+                  https://hub.docker.com/v2/repositories/${DOCKERHUB_IMAGE} || :
+              else
+                echo "Not the default Github branch. Skipping readme sync to Docker Hub."
+              fi
+              rm -Rf ${TEMPDIR}'''
+        script{
+          env.FILES_UPDATED = sh(
+            script: '''cat /tmp/${COMMIT_SHA}-${BUILD_NUMBER}''',
+            returnStdout: true).trim()
         }
       }
     }
@@ -455,14 +483,16 @@ pipeline {
       }
       steps{
         sh '''curl -H "Content-Type: application/json" -H "Private-Token: ${GITLAB_TOKEN}" -X POST https://gitlab.com/api/v4/projects \
-        -d '{"namespace_id":'${GITLAB_NAMESPACE}',\
-             "name":"'${LS_REPO}'",
-             "mirror":true,\
-             "import_url":"https://github.com/linuxserver/'${LS_REPO}'.git",\
-             "issues_access_level":"disabled",\
-             "merge_requests_access_level":"disabled",\
-             "repository_access_level":"enabled",\
-             "visibility":"public"}' '''
+          -d '{"namespace_id":'${GITLAB_NAMESPACE}',\
+            "name":"'${LS_REPO}'",
+            "mirror":true,\
+            "import_url":"https://github.com/linuxserver/'${LS_REPO}'.git",\
+            "issues_access_level":"disabled",\
+            "merge_requests_access_level":"disabled",\
+            "repository_access_level":"enabled",\
+            "visibility":"public"}' '''
+        sh '''curl -H "Private-Token: ${GITLAB_TOKEN}" -X PUT "https://gitlab.com/api/v4/projects/Linuxserver.io%2F${LS_REPO}" \
+          -d "mirror=true&import_url=https://github.com/linuxserver/${LS_REPO}.git" '''
       } 
     }
     /* ###############
@@ -705,12 +735,6 @@ pipeline {
         withCredentials([
           [
             $class: 'UsernamePasswordMultiBinding',
-            credentialsId: '3f9ba4d5-100d-45b0-a3c4-633fd6061207',
-            usernameVariable: 'DOCKERUSER',
-            passwordVariable: 'DOCKERPASS'
-          ],
-          [
-            $class: 'UsernamePasswordMultiBinding',
             credentialsId: 'Quay.io-Robot',
             usernameVariable: 'QUAYUSER',
             passwordVariable: 'QUAYPASS'
@@ -719,7 +743,7 @@ pipeline {
           retry(5) {
             sh '''#! /bin/bash
                   set -e
-                  echo $DOCKERPASS | docker login -u $DOCKERUSER --password-stdin
+                  echo $DOCKERHUB_TOKEN | docker login -u linuxserverci --password-stdin
                   echo $GITHUB_TOKEN | docker login ghcr.io -u LinuxServer-CI --password-stdin
                   echo $GITLAB_TOKEN | docker login registry.gitlab.com -u LinuxServer.io --password-stdin
                   echo $QUAYPASS | docker login quay.io -u $QUAYUSER --password-stdin
@@ -752,12 +776,6 @@ pipeline {
         withCredentials([
           [
             $class: 'UsernamePasswordMultiBinding',
-            credentialsId: '3f9ba4d5-100d-45b0-a3c4-633fd6061207',
-            usernameVariable: 'DOCKERUSER',
-            passwordVariable: 'DOCKERPASS'
-          ],
-          [
-            $class: 'UsernamePasswordMultiBinding',
             credentialsId: 'Quay.io-Robot',
             usernameVariable: 'QUAYUSER',
             passwordVariable: 'QUAYPASS'
@@ -766,7 +784,7 @@ pipeline {
           retry(5) {
             sh '''#! /bin/bash
                   set -e
-                  echo $DOCKERPASS | docker login -u $DOCKERUSER --password-stdin
+                  echo $DOCKERHUB_TOKEN | docker login -u linuxserverci --password-stdin
                   echo $GITHUB_TOKEN | docker login ghcr.io -u LinuxServer-CI --password-stdin
                   echo $GITLAB_TOKEN | docker login registry.gitlab.com -u LinuxServer.io --password-stdin
                   echo $QUAYPASS | docker login quay.io -u $QUAYUSER --password-stdin
