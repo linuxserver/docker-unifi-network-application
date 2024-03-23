@@ -64,7 +64,7 @@ After setup, the web UI is available at https://ip:8443. The application can be 
 
 ### Setting Up Your External Database
 
-Formally only mongodb 3.6 through 4.4 are supported, however, it has been reported that newer versions will work. If you choose to use a newer version be aware that you will not be operating a supported configuration.
+Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported.
 
 **Make sure you pin your database image version and do not use `latest`, as mongodb does not support automatic upgrades between major versions.**
 
@@ -156,7 +156,7 @@ services:
       - MONGO_TLS= #optional
       - MONGO_AUTHSOURCE= #optional
     volumes:
-      - /path/to/data:/config
+      - /path/to/unifi-network-application/data:/config
     ports:
       - 8443:8443
       - 3478:3478/udp
@@ -197,7 +197,7 @@ docker run -d \
   -p 8880:8880 `#optional` \
   -p 6789:6789 `#optional` \
   -p 5514:5514/udp `#optional` \
-  -v /path/to/data:/config \
+  -v /path/to/unifi-network-application/data:/config \
   --restart unless-stopped \
   lscr.io/linuxserver/unifi-network-application:latest
 ```
@@ -230,7 +230,7 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `-e MONGO_REPLICASET=` | Name of Mongodb (existing) [replicaset](https://www.mongodb.com/docs/manual/reference/connection-string/#replica-set-option).  Only evaluated on first run. |
 | `-e MONGO_TLS=` | Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run. |
 | `-e MONGO_AUTHSOURCE=` | Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run. |
-| `-v /config` | All Unifi data stored here |
+| `-v /config` | Persistent config files |
 
 ## Environment variables from files (Docker secrets)
 
