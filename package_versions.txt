@@ -21,7 +21,7 @@ bash                                      5.1.16                                
 bcpkix-jdk18on                            1.75                                     java-archive    
 bcprov-jdk18on                            1.75                                     java-archive    
 bcutil-jdk18on                            1.75                                     java-archive    
-bsdutils                                  1:2.37.2-4ubuntu3.3                      deb             
+bsdutils                                  1:2.37.2-4ubuntu3.4                      deb             
 bson                                      4.11.1                                   java-archive    
 bson-record-codec                         4.11.1                                   java-archive    
 ca-certificates                           20230311ubuntu0.22.04.1                  deb             
@@ -154,7 +154,7 @@ libaudit1                                 1:3.0.7-1build1                       
 libavahi-client3                          0.8-5ubuntu5.2                           deb             
 libavahi-common-data                      0.8-5ubuntu5.2                           deb             
 libavahi-common3                          0.8-5ubuntu5.2                           deb             
-libblkid1                                 2.37.2-4ubuntu3.3                        deb             
+libblkid1                                 2.37.2-4ubuntu3.4                        deb             
 libbrotli1                                1.0.9-2build6                            deb             
 libbsd0                                   0.11.5-1                                 deb             
 libbz2-1.0                                1.0.8-5build1                            deb             
@@ -179,7 +179,7 @@ libgcc-s1                                 12.3.0-1ubuntu1~22.04                 
 libgcrypt20                               1.9.4-3ubuntu3                           deb             
 libglib2.0-0                              2.72.4-0ubuntu2.2                        deb             
 libgmp10                                  2:6.2.1+dfsg-3ubuntu1                    deb             
-libgnutls30                               3.7.3-4ubuntu1.4                         deb             
+libgnutls30                               3.7.3-4ubuntu1.5                         deb             
 libgpg-error0                             1.43-3                                   deb             
 libgraphite2-3                            1.3.14-1build2                           deb             
 libgssapi-krb5-2                          1.19.2-2ubuntu0.3                        deb             
@@ -200,7 +200,7 @@ libldap-common                            2.5.17+dfsg-0ubuntu0.22.04.1          
 liblz4-1                                  1.9.3-2build2                            deb             
 liblzma5                                  5.2.5-2ubuntu1                           deb             
 libmd0                                    1.0.4-1build1                            deb             
-libmount1                                 2.37.2-4ubuntu3.3                        deb             
+libmount1                                 2.37.2-4ubuntu3.4                        deb             
 libncurses6                               6.3-2ubuntu0.1                           deb             
 libncursesw6                              6.3-2ubuntu0.1                           deb             
 libnettle8                                3.7.3-1build2                            deb             
@@ -232,7 +232,7 @@ libselinux1                               3.3-1build2                           
 libsemanage-common                        3.3-1build2                              deb             
 libsemanage2                              3.3-1build2                              deb             
 libsepol2                                 3.3-1build1                              deb             
-libsmartcols1                             2.37.2-4ubuntu3.3                        deb             
+libsmartcols1                             2.37.2-4ubuntu3.4                        deb             
 libsqlite3-0                              3.37.2-2ubuntu0.3                        deb             
 libss2                                    1.46.5-2ubuntu1.1                        deb             
 libssh-4                                  0.9.6-2ubuntu0.22.04.3                   deb             
@@ -245,7 +245,7 @@ libtirpc-common                           1.3.2-2ubuntu0.1                      
 libtirpc3                                 1.3.2-2ubuntu0.1                         deb             
 libudev1                                  249.11-0ubuntu3.12                       deb             
 libunistring2                             1.0-1                                    deb             
-libuuid1                                  2.37.2-4ubuntu3.3                        deb             
+libuuid1                                  2.37.2-4ubuntu3.4                        deb             
 libxxhash0                                0.8.1-1                                  deb             
 libzstd1                                  1.4.8+dfsg-3build1                       deb             
 locales                                   2.35-0ubuntu3.6                          deb             
@@ -265,7 +265,7 @@ minimal-json                              0.9.5                                 
 mongodb-driver-core                       4.11.1                                   java-archive    
 mongodb-driver-legacy                     4.11.1                                   java-archive    
 mongodb-driver-sync                       4.11.1                                   java-archive    
-mount                                     2.37.2-4ubuntu3.3                        deb             
+mount                                     2.37.2-4ubuntu3.4                        deb             
 ncurses-base                              6.3-2ubuntu0.1                           deb             
 ncurses-bin                               6.3-2ubuntu0.1                           deb             
 netcat                                    1.218-4ubuntu1                           deb             
@@ -331,5 +331,5 @@ ucf                                       3.0043                                
 unzip                                     6.0-26ubuntu3.2                          deb             
 urlrewritefilter                          4.0.4.1                                  java-archive    
 usrmerge                                  25ubuntu2                                deb             
-util-linux                                2.37.2-4ubuntu3.3                        deb             
+util-linux                                2.37.2-4ubuntu3.4                        deb             
 zlib1g                                    1:1.2.11.dfsg-2ubuntu9.2                 deb             
