@@ -64,31 +64,63 @@ app_setup_block: |
   Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported.
 
   **Make sure you pin your database image version and do not use `latest`, as mongodb does not support automatic upgrades between major versions.**
+  
+  **MongoDB >4.4 on X86_64 Hardware needs a CPU with AVX support. Some lower end Intel CPU models like Celeron and Pentium (before Tiger-Lake) more Details: [Advanced Vector Extensions - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX) don't support AVX, but you can still use MongoDB 4.4.**
 
-  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your user using an `init-mongo.js` file with the following contents:
+  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version 6 and up, you can create your user using an `init-mongo.js` file with the following contents:
 
   ```js
   db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
   db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
   ```
+  
+  If you are using mongodb < 6.0 and below, you can create a `init-mongo.sh` file with the following contents:
+  ```sh
+  #!/bin/bash
+
+  mongo <<EOF
+  use admin
+  db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
+  use ${MONGO_DBNAME}
+  db.createUser({
+    user: "${MONGO_USER}",
+    pwd: "${MONGO_PASS}",
+    roles: [
+      { db: "${MONGO_DBNAME}", role: "dbOwner" },
+      { db: "${MONGO_DBNAME}_stat", role: "dbOwner" }
+    ]
+  })
+  EOF
+  ```
 
   Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
 
   For example:
+    MongoDB >= 6.0 and up:
+    ```yaml
+      unifi-db:
+        image: docker.io/mongo:<version tag>
+        container_name: unifi-db
+        volumes:
+          - /path/to/data:/data/db
+          - /path/to/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+        restart: unless-stopped
+    ```
+    MongoDB < 6.0:
+    ```yaml
+      unifi-db:
+        image: docker.io/mongo:<version tag>
+        container_name: unifi-db
+        volumes:
+          - /path/to/data:/data/db
+          - /path/to/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+        restart: unless-stopped
+    ```
+  
 
-  ```yaml
-    unifi-db:
-      image: docker.io/mongo:<version tag>
-      container_name: unifi-db
-      volumes:
-        - /path/to/data:/data/db
-        - /path/to/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      restart: unless-stopped
-  ```
+  *Note that the init script method will only work on first run. If you start the Mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
 
-  *Note that the init script method will only work on first run. If you start the mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
-
-  *If you are using the init script method do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts.*
+  *If you are using the init JS method do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts. Setting these variables for the .sh file is necessary*
 
   You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
 
