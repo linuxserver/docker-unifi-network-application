@@ -17,7 +17,6 @@ aws-java-sdk-s3                           1.11.409                              
 base-files                                12ubuntu4.6                              deb             
 base-passwd                               3.5.52build1                             deb             
 bash                                      5.1-6ubuntu1.1                           deb             
-bash                                      5.1.16                                   binary          
 bcpkix-jdk18on                            1.75                                     java-archive    
 bcprov-jdk18on                            1.75                                     java-archive    
 bcutil-jdk18on                            1.75                                     java-archive    
@@ -27,6 +26,7 @@ bson-record-codec                         4.11.1                                
 ca-certificates                           20230311ubuntu0.22.04.1                  deb             
 ca-certificates-java                                                               java-archive    
 ca-certificates-java                      20190909ubuntu1.2                        deb             
+catatonit                                 0.1.7-1                                  deb             
 checker-qual                              3.12.0                                   java-archive    
 classmate                                 1.6.0                                    java-archive    
 coloring                                  1.0                                      java-archive    
@@ -177,7 +177,7 @@ libfontconfig1                            2.13.1-4.2ubuntu5                     
 libfreetype6                              2.11.1+dfsg-1ubuntu0.2                   deb             
 libgcc-s1                                 12.3.0-1ubuntu1~22.04                    deb             
 libgcrypt20                               1.9.4-3ubuntu3                           deb             
-libglib2.0-0                              2.72.4-0ubuntu2.2                        deb             
+libglib2.0-0                              2.72.4-0ubuntu2.3                        deb             
 libgmp10                                  2:6.2.1+dfsg-3ubuntu1                    deb             
 libgnutls30                               3.7.3-4ubuntu1.5                         deb             
 libgpg-error0                             1.43-3                                   deb             
