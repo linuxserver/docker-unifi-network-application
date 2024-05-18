@@ -20,7 +20,7 @@ jobs:
           echo "**** External trigger running off of main branch. To disable this trigger, set a Github secret named \"PAUSE_EXTERNAL_TRIGGER_UNIFI_NETWORK_APPLICATION_MAIN\". ****"
           echo "External trigger running off of main branch. To disable this trigger, set a Github secret named \`PAUSE_EXTERNAL_TRIGGER_UNIFI_NETWORK_APPLICATION_MAIN\`" >> $GITHUB_STEP_SUMMARY
           echo "**** Retrieving external version ****"
-          EXT_RELEASE=$(curl -sX GET http://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}')
+          EXT_RELEASE=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}')
           if [ -z "${EXT_RELEASE}" ] || [ "${EXT_RELEASE}" == "null" ]; then
             echo "**** Can't retrieve external version, exiting ****"
             FAILURE_REASON="Can't retrieve external version for unifi-network-application branch main"
