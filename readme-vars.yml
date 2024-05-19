@@ -67,14 +67,14 @@ app_setup_block: |
   
   **MongoDB >4.4 on X86_64 Hardware needs a CPU with AVX support. Some lower end Intel CPU models like Celeron and Pentium (before Tiger-Lake) more Details: [Advanced Vector Extensions - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX) don't support AVX, but you can still use MongoDB 4.4.**
 
-  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version 6 and up, you can create your user using an `init-mongo.js` file with the following contents:
+  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version >=6, you can create your user using an `init-mongo.js` file with the following contents:
 
   ```js
   db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
   db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
   ```
   
-  If you are using mongodb < 6.0 and below, you can create a `init-mongo.sh` file with the following contents:
+  If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the following contents:
   ```sh
   #!/bin/bash
 
@@ -96,7 +96,7 @@ app_setup_block: |
   Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
 
   For example:
-    MongoDB >= 6.0 and up:
+    MongoDB >= 6.0:
     ```yaml
       unifi-db:
         image: docker.io/mongo:<version tag>
