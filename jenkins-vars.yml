@@ -3,7 +3,7 @@
 # jenkins variables
 project_name: unifi-network-application
 external_type: na
-custom_version_command: "curl -sX GET http://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}'"
+custom_version_command: "curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}'"
 release_type: stable
 release_tag: latest
 ls_branch: main
