@@ -141,7 +141,7 @@ jmdns                                     3.4.1                                 
 jna                                       5.12.1                                   java-archive                  
 joda-time                                 2.10.4                                   java-archive                  
 jq                                        1.6-2.1ubuntu3                           deb                           
-jrt-fs                                    17.0.10                                  java-archive                  
+jrt-fs                                    17.0.11                                  java-archive                  
 json                                      20231013                                 java-archive                  
 jsr305                                    3.0.1                                    java-archive                  
 jsr305                                    3.0.2                                    java-archive                  
@@ -165,8 +165,8 @@ libblkid1                                 2.37.2-4ubuntu3.4                     
 libbrotli1                                1.0.9-2build6                            deb                           
 libbsd0                                   0.11.5-1                                 deb                           
 libbz2-1.0                                1.0.8-5build1                            deb                           
-libc-bin                                  2.35-0ubuntu3.7                          deb                           
-libc6                                     2.35-0ubuntu3.7                          deb                           
+libc-bin                                  2.35-0ubuntu3.8                          deb                           
+libc6                                     2.35-0ubuntu3.8                          deb                           
 libcap-ng0                                0.7.9-2.2build3                          deb                           
 libcap2                                   1:2.44-1ubuntu0.22.04.1                  deb                           
 libcom-err2                               1.46.5-2ubuntu1.1                        deb                           
@@ -255,7 +255,7 @@ libunistring2                             1.0-1                                 
 libuuid1                                  2.37.2-4ubuntu3.4                        deb                           
 libxxhash0                                0.8.1-1                                  deb                           
 libzstd1                                  1.4.8+dfsg-3build1                       deb                           
-locales                                   2.35-0ubuntu3.7                          deb                           
+locales                                   2.35-0ubuntu3.8                          deb                           
 log4j-api                                 2.21.1                                   java-archive                  
 log4j-to-slf4j                            2.21.1                                   java-archive                  
 logback-access                            1.4.14                                   java-archive                  
@@ -278,7 +278,7 @@ ncurses-base                              6.3-2ubuntu0.1                        
 ncurses-bin                               6.3-2ubuntu0.1                           deb                           
 netcat                                    1.218-4ubuntu1                           deb                           
 netcat-openbsd                            1.218-4ubuntu1                           deb                           
-openjdk-17-jre-headless                   17.0.10+7-1~22.04.1                      deb                           
+openjdk-17-jre-headless                   17.0.11+9-1~22.04.1                      deb                           
 openssh                                   1.0                                      java-archive                  
 openssl                                   3.0.2-0ubuntu1.15                        deb                           
 org.eclipse.paho.client.mqttv3            1.1.0                                    java-archive                  
