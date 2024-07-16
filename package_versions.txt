@@ -335,7 +335,7 @@ tomcat-embed-el                           10.1.20                               
 tomcat-embed-jasper                       10.1.20                                  java-archive                  
 tomcat-embed-websocket                    10.1.20                                  java-archive                  
 txw2                                      4.0.5                                    java-archive                  
-tzdata                                    2024a-0ubuntu0.22.04                     deb                           
+tzdata                                    2024a-0ubuntu0.22.04.1                   deb                           
 ubuntu-keyring                            2021.03.26                               deb                           
 ucf                                       3.0043                                   deb                           
 unzip                                     6.0-26ubuntu3.2                          deb                           
