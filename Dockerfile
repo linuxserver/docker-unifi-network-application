@@ -17,6 +17,7 @@ RUN \
   echo "**** install packages ****" && \
   apt-get update && \
   apt-get install --no-install-recommends -y \
+    gettext \
     jsvc \
     logrotate \
     openjdk-17-jre-headless \

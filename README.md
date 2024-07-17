@@ -183,15 +183,11 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - MONGO_USER=unifi
-      - MONGO_PASS=
-      - MONGO_HOST=unifi-db
-      - MONGO_PORT=27017
+      - MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/unifi?retryWrites=true&w=majority&appName=unifi
+      - STAT_MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/unifi_stats?retryWrites=true&w=majority&appName=unifi
       - MONGO_DBNAME=unifi
       - MEM_LIMIT=1024 #optional
       - MEM_STARTUP=1024 #optional
-      - MONGO_TLS= #optional
-      - MONGO_AUTHSOURCE= #optional
     volumes:
       - /path/to/unifi-network-application/data:/config
     ports:
@@ -215,15 +211,11 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e MONGO_USER=unifi \
-  -e MONGO_PASS= \
-  -e MONGO_HOST=unifi-db \
-  -e MONGO_PORT=27017 \
+  -e MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
+  -e STAT_MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
   -e MONGO_DBNAME=unifi \
   -e MEM_LIMIT=1024 `#optional` \
   -e MEM_STARTUP=1024 `#optional` \
-  -e MONGO_TLS= `#optional` \
-  -e MONGO_AUTHSOURCE= `#optional` \
   -p 8443:8443 \
   -p 3478:3478/udp \
   -p 10001:10001/udp \
