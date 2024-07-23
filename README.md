@@ -96,12 +96,6 @@ db.createUser({
 EOF
 ```
 
-If you are using the Mongo v4 (the latest which does not require AVX):
-
-```js
-db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}, {role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
-```
-
 Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
 
 For example:
