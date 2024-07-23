@@ -64,7 +64,7 @@ app_setup_block: |
   Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported.
 
   **Make sure you pin your database image version and do not use `latest`, as mongodb does not support automatic upgrades between major versions.**
-  
+
   **MongoDB >4.4 on X86_64 Hardware needs a CPU with AVX support. Some lower end Intel CPU models like Celeron and Pentium (before Tiger-Lake) more Details: [Advanced Vector Extensions - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX) don't support AVX, but you can still use MongoDB 4.4.**
 
   If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version >=6, you can create your user using an `init-mongo.js` file with the following contents:
@@ -73,7 +73,7 @@ app_setup_block: |
   db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
   db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
   ```
-  
+
   If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the following contents:
   ```sh
   #!/bin/bash
@@ -91,12 +91,6 @@ app_setup_block: |
     ]
   })
   EOF
-  ```
-
-  If you are using the Mongo v4 (the latest which does not require AVX):
-
-  ```js
-  db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}, {role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
   ```
 
   Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
@@ -122,7 +116,7 @@ app_setup_block: |
           - /path/to/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
         restart: unless-stopped
     ```
-  
+
 
   *Note that the init script method will only work on first run. If you start the Mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
 
