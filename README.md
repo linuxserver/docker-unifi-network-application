@@ -82,15 +82,13 @@ If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the f
 #!/bin/bash
 
 mongo <<EOF
-use admin
-db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
-use ${MONGO_DBNAME}
+use MONGO_DBNAME
 db.createUser({
-  user: "${MONGO_USER}",
-  pwd: "${MONGO_PASS}",
+  user: "MONGO_USER",
+  pwd: "MONGO_PASS",
   roles: [
-    { db: "${MONGO_DBNAME}", role: "dbOwner" },
-    { db: "${MONGO_DBNAME}_stat", role: "dbOwner" }
+    { db: "MONGO_DBNAME", role: "dbOwner" },
+    { db: "MONGO_DBNAME_stat", role: "dbOwner" }
   ]
 })
 EOF
@@ -123,7 +121,7 @@ For example:
 
 *Note that the init script method will only work on first run. If you start the Mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
 
-*If you are using the init JS method do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts. Setting these variables for the .sh file is necessary*
+*If you are using the provided init JS or SH snippets, do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts. If you wish to enable Role Based Access Control (RBAC) in mongodb, you will have to create your own init JS or SH, or create the user and databases manually.*
 
 You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
 
