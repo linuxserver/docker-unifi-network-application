@@ -35,6 +35,7 @@ param_env_vars:
   - { env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run." }
   - { env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run." }
   - { env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run." }
+  - { env_var: "MONGO_AUTHSOURCE", env_value: "admin", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run." }
 
 # optional container parameters
 opt_param_usage_include_env: true
@@ -42,7 +43,6 @@ opt_param_env_vars:
   - { env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default" }
   - { env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default" }
   - { env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run." }
-  - { env_var: "MONGO_AUTHSOURCE", env_value: "", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run." }
 
 opt_param_usage_include_ports: true
 opt_param_ports:
@@ -67,48 +67,45 @@ app_setup_block: |
 
   **MongoDB >4.4 on X86_64 Hardware needs a CPU with AVX support. Some lower end Intel CPU models like Celeron and Pentium (before Tiger-Lake) more Details: [Advanced Vector Extensions - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX) don't support AVX, but you can still use MongoDB 4.4.**
 
-  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version >=6, you can create your user using an `init-mongo.js` file with the following contents:
+  If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your user using an `init-mongo.sh` file with the following contents (do not modify; copy/paste as is):
 
-  ```js
-  db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
-  db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
-  ```
-
-  If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the following contents:
   ```sh
   #!/bin/bash
 
-  mongo <<EOF
-  use MONGO_DBNAME
+  if which mongosh > /dev/null 2>&1; then
+    mongo_init_bin='mongosh'
+  else
+    mongo_init_bin='mongo'
+  fi
+  "${mongo_init_bin}" <<EOF
+  use "{MONGO_AUTHSOURCE}"
+  db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
+  use "${MONGO_DBNAME}"
   db.createUser({
-    user: "MONGO_USER",
-    pwd: "MONGO_PASS",
+    user: "${MONGO_USER}",
+    pwd: "${MONGO_PASS}",
     roles: [
-      { db: "MONGO_DBNAME", role: "dbOwner" },
-      { db: "MONGO_DBNAME_stat", role: "dbOwner" }
+      { db: "${MONGO_DBNAME}", role: "dbOwner" },
+      { db: "${MONGO_DBNAME}_stat", role: "dbOwner" }
     ]
   })
   EOF
   ```
 
-  Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
+  Mount the sh file into your *mongodb* container, and make sure to set the env vars below with the same values you supplied to the Unifi container.
 
   For example:
-    MongoDB >= 6.0:
     ```yaml
       unifi-db:
         image: docker.io/mongo:<version tag>
         container_name: unifi-db
-        volumes:
-          - /path/to/data:/data/db
-          - /path/to/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-        restart: unless-stopped
-    ```
-    MongoDB < 6.0:
-    ```yaml
-      unifi-db:
-        image: docker.io/mongo:<version tag>
-        container_name: unifi-db
+        environment:
+          - MONGO_INITDB_ROOT_USERNAME=root
+          - MONGO_INITDB_ROOT_PASSWORD=
+          - MONGO_USER=unifi
+          - MONGO_PASS=
+          - MONGO_DBNAME=unifi
+          - MONGO_AUTHSOURCE=admin
         volumes:
           - /path/to/data:/data/db
           - /path/to/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
@@ -117,8 +114,6 @@ app_setup_block: |
 
 
   *Note that the init script method will only work on first run. If you start the Mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
-
-  *If you are using the provided init JS or SH snippets, do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts. If you wish to enable Role Based Access Control (RBAC) in mongodb, you will have to create your own init JS or SH, or create the user and databases manually.*
 
   You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
 
@@ -153,6 +148,7 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "07.08.24:", desc: "**Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup." }
   - { date: "04.03.24:", desc: "Install from zip package instead of deb." }
   - { date: "17.10.23:", desc: "Add environment variables for TLS and authSource to support Atlas and new MongoDB versions." }
   - { date: "05.09.23:", desc: "Initial release." }
