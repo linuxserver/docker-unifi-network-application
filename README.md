@@ -73,8 +73,8 @@ Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 
 If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version >=6, you can create your user using an `init-mongo.js` file with the following contents:
 
 ```js
-db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
-db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
+// Be sure to replace the placeholders
+db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}, {role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
 ```
 
 If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the following contents:
