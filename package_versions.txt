@@ -143,7 +143,7 @@ jmdns                                     3.4.1                                 
 jna                                       5.12.1                                   java-archive                  
 joda-time                                 2.10.4                                   java-archive                  
 jq                                        1.6-2.1ubuntu3                           deb                           
-jrt-fs                                    17.0.11                                  java-archive                  
+jrt-fs                                    17.0.12                                  java-archive                  
 json                                      20231013                                 java-archive                  
 jsr305                                    3.0.1                                    java-archive                  
 jsr305                                    3.0.2                                    java-archive                  
@@ -204,8 +204,8 @@ libkrb5-3                                 1.19.2-2ubuntu0.3                     
 libkrb5support0                           1.19.2-2ubuntu0.3                        deb                           
 libksba8                                  1.6.0-2ubuntu0.2                         deb                           
 liblcms2-2                                2.12~rc1-2build2                         deb                           
-libldap-2.5-0                             2.5.18+dfsg-0ubuntu0.22.04.1             deb                           
-libldap-common                            2.5.18+dfsg-0ubuntu0.22.04.1             deb                           
+libldap-2.5-0                             2.5.18+dfsg-0ubuntu0.22.04.2             deb                           
+libldap-common                            2.5.18+dfsg-0ubuntu0.22.04.2             deb                           
 liblz4-1                                  1.9.3-2build2                            deb                           
 liblzma5                                  5.2.5-2ubuntu1                           deb                           
 libmd0                                    1.0.4-1build1                            deb                           
@@ -280,7 +280,7 @@ ncurses-base                              6.3-2ubuntu0.1                        
 ncurses-bin                               6.3-2ubuntu0.1                           deb                           
 netcat                                    1.218-4ubuntu1                           deb                           
 netcat-openbsd                            1.218-4ubuntu1                           deb                           
-openjdk-17-jre-headless                   17.0.11+9-1~22.04.1                      deb                           
+openjdk-17-jre-headless                   17.0.12+7-1ubuntu2~22.04                 deb                           
 openssh                                   1.0                                      java-archive                  
 openssl                                   3.0.2-0ubuntu1.16                        deb                           
 org.eclipse.paho.client.mqttv3            1.1.0                                    java-archive                  
