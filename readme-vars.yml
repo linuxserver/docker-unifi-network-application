@@ -12,9 +12,6 @@ available_architectures:
   - { arch: "{{ arch_x86_64 }}", tag: "amd64-latest"}
   - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
 
-# development version
-development_versions: false
-
 # container parameters
 param_container_name: "{{ project_name }}"
 param_usage_include_vols: true
@@ -148,7 +145,8 @@ app_setup_block: |
 
 # changelog
 changelogs:
-  - { date: "07.08.24:", desc: "**Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup." }
+  - { date: "11.08.24:", desc: "**Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup." }
+  - { date: "11.08.24:", desc: "Rebase to Ubuntu Noble." }
   - { date: "04.03.24:", desc: "Install from zip package instead of deb." }
   - { date: "17.10.23:", desc: "Add environment variables for TLS and authSource to support Atlas and new MongoDB versions." }
   - { date: "05.09.23:", desc: "Initial release." }
