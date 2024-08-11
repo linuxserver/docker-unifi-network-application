@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/linuxserver/baseimage-ubuntu:arm64v8-jammy
+FROM ghcr.io/linuxserver/baseimage-ubuntu:arm64v8-noble
 
 # set version label
 ARG BUILD_DATE
@@ -34,6 +34,7 @@ RUN \
     "https://dl.ui.com/unifi/${UNIFI_VERSION}/UniFi.unix.zip" && \
   unzip /tmp/unifi.zip -d /usr/lib && \
   mv /usr/lib/UniFi /usr/lib/unifi && \
+  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** cleanup ****" && \
   apt-get clean && \
   rm -rf \
