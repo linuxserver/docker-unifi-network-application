@@ -81,9 +81,9 @@ else
   mongo_init_bin='mongo'
 fi
 "${mongo_init_bin}" <<EOF
-use "{MONGO_AUTHSOURCE}"
+use ${MONGO_AUTHSOURCE}
 db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
-use "${MONGO_DBNAME}"
+use ${MONGO_DBNAME}
 db.createUser({
   user: "${MONGO_USER}",
   pwd: "${MONGO_PASS}",
