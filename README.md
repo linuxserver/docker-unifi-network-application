@@ -70,21 +70,20 @@ Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 
 
 **MongoDB >4.4 on X86_64 Hardware needs a CPU with AVX support. Some lower end Intel CPU models like Celeron and Pentium (before Tiger-Lake) more Details: [Advanced Vector Extensions - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX) don't support AVX, but you can still use MongoDB 4.4.**
 
-If you are using the [official mongodb container](https://hub.docker.com/_/mongo/) in Version >=6, you can create your user using an `init-mongo.js` file with the following contents:
+If you are using the [official mongodb container](https://hub.docker.com/_/mongo/), you can create your user using an `init-mongo.sh` file with the following contents (do not modify; copy/paste as is):
 
-```js
-db.getSiblingDB("MONGO_DBNAME").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME"}]});
-db.getSiblingDB("MONGO_DBNAME_stat").createUser({user: "MONGO_USER", pwd: "MONGO_PASS", roles: [{role: "dbOwner", db: "MONGO_DBNAME_stat"}]});
-```
-
-If you are using mongodb < 6.0, you can create a `init-mongo.sh` file with the following contents:
 ```sh
 #!/bin/bash
 
-mongo <<EOF
-use admin
+if which mongosh > /dev/null 2>&1; then
+  mongo_init_bin='mongosh'
+else
+  mongo_init_bin='mongo'
+fi
+"${mongo_init_bin}" <<EOF
+use "{MONGO_AUTHSOURCE}"
 db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
-use ${MONGO_DBNAME}
+use "${MONGO_DBNAME}"
 db.createUser({
   user: "${MONGO_USER}",
   pwd: "${MONGO_PASS}",
@@ -96,24 +95,20 @@ db.createUser({
 EOF
 ```
 
-Being sure to replace the placeholders with the same values you supplied to the Unifi container, and mount it into your *mongodb* container.
+Mount the sh file into your *mongodb* container, and make sure to set the env vars below with the same values you supplied to the Unifi container.
 
 For example:
-  MongoDB >= 6.0:
   ```yaml
     unifi-db:
       image: docker.io/mongo:<version tag>
       container_name: unifi-db
-      volumes:
-        - /path/to/data:/data/db
-        - /path/to/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      restart: unless-stopped
-  ```
-  MongoDB < 6.0:
-  ```yaml
-    unifi-db:
-      image: docker.io/mongo:<version tag>
-      container_name: unifi-db
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=
+        - MONGO_USER=unifi
+        - MONGO_PASS=
+        - MONGO_DBNAME=unifi
+        - MONGO_AUTHSOURCE=admin
       volumes:
         - /path/to/data:/data/db
         - /path/to/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
@@ -122,8 +117,6 @@ For example:
 
 
 *Note that the init script method will only work on first run. If you start the Mongodb container without an init script it will generate test data automatically and you will have to manually create your databases, or restart with a clean `/data/db` volume and an init script mounted.*
-
-*If you are using the init JS method do not also set `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, or any other "INITDB" values as they will cause conflicts. Setting these variables for the .sh file is necessary*
 
 You can also run the commands directly against the database using either `mongo` (< 6.0) or `mongosh` (>= 6.0).
 
@@ -182,10 +175,10 @@ services:
       - MONGO_HOST=unifi-db
       - MONGO_PORT=27017
       - MONGO_DBNAME=unifi
+      - MONGO_AUTHSOURCE=admin
       - MEM_LIMIT=1024 #optional
       - MEM_STARTUP=1024 #optional
       - MONGO_TLS= #optional
-      - MONGO_AUTHSOURCE= #optional
     volumes:
       - /path/to/unifi-network-application/data:/config
     ports:
@@ -214,10 +207,10 @@ docker run -d \
   -e MONGO_HOST=unifi-db \
   -e MONGO_PORT=27017 \
   -e MONGO_DBNAME=unifi \
+  -e MONGO_AUTHSOURCE=admin \
   -e MEM_LIMIT=1024 `#optional` \
   -e MEM_STARTUP=1024 `#optional` \
   -e MONGO_TLS= `#optional` \
-  -e MONGO_AUTHSOURCE= `#optional` \
   -p 8443:8443 \
   -p 3478:3478/udp \
   -p 10001:10001/udp \
@@ -255,10 +248,10 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `-e MONGO_HOST=unifi-db` | Mongodb Hostname. Only evaluated on first run. |
 | `-e MONGO_PORT=27017` | Mongodb Port. Only evaluated on first run. |
 | `-e MONGO_DBNAME=unifi` | Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run. |
+| `-e MONGO_AUTHSOURCE=admin` | Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run. |
 | `-e MEM_LIMIT=1024` | Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default |
 | `-e MEM_STARTUP=1024` | Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default |
 | `-e MONGO_TLS=` | Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run. |
-| `-e MONGO_AUTHSOURCE=` | Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`.Defaults to `MONGO_DBNAME`.Only evaluated on first run. |
 | `-v /config` | Persistent config files |
 
 ## Environment variables from files (Docker secrets)
@@ -422,7 +415,8 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
-* **18.07.24:** - Rebase to Ubuntu Noble.
+* **11.08.24:** - **Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup.
+* **11.08.24:** - Rebase to Ubuntu Noble.
 * **04.03.24:** - Install from zip package instead of deb.
 * **17.10.23:** - Add environment variables for TLS and authSource to support Atlas and new MongoDB versions.
 * **05.09.23:** - Initial release.
