@@ -31,8 +31,8 @@ pipeline {
     CI_PORT='8443'
     CI_SSL='true'
     CI_DELAY='180'
-    CI_DOCKERENV='TZ=US/Pacific'
-    CI_AUTH='user:password'
+    CI_DOCKERENV=''
+    CI_AUTH=''
     CI_WEBPATH=''
   }
   stages {
