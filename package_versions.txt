@@ -321,7 +321,7 @@ tomcat-embed-websocket                    10.1.25                            jav
 txw2                                      4.0.5                              java-archive                  
 tzdata                                    2024a-3ubuntu1.1                   deb                           
 ubuntu-keyring                            2023.11.28.1                       deb                           
-unzip                                     6.0-28ubuntu4                      deb                           
+unzip                                     6.0-28ubuntu4.1                    deb                           
 urlrewritefilter                          4.0.4.1                            java-archive                  
 util-linux                                2.39.3-9ubuntu6.1                  deb                           
 xpp3                                      1.1.4c                             java-archive                  
