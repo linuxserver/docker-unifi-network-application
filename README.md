@@ -201,10 +201,8 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e MONGO_USER=unifi \
-  -e MONGO_PASS= \
-  -e MONGO_HOST=unifi-db \
-  -e MONGO_PORT=27017 \
+  -e MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
+  -e STAT_MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
   -e MONGO_DBNAME=unifi \
   -e MONGO_AUTHSOURCE=admin \
   -e MEM_LIMIT=1024 `#optional` \
