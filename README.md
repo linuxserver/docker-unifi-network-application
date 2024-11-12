@@ -148,6 +148,7 @@ The simplest migration approach is to take a full backup of your existing instal
 
 You can then start up the new container with a clean `/config` mount (and a database container configured), and perform a restore using the setup wizard.
 
+ 
 ### Strict reverse proxies
 
 This image uses a self-signed certificate by default. This naturally means the scheme is `https`.
@@ -405,10 +406,10 @@ docker build \
   -t lscr.io/linuxserver/unifi-network-application:latest .
 ```
 
-The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-static`
+The ARM variants can be built on x86_64 hardware and vice versa using `lscr.io/linuxserver/qemu-static`
 
 ```bash
-docker run --rm --privileged multiarch/qemu-user-static:register --reset
+docker run --rm --privileged lscr.io/linuxserver/qemu-static --reset
 ```
 
 Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
