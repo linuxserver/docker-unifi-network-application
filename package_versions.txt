@@ -141,7 +141,7 @@ jmdns                                     3.4.1                              jav
 jna                                       5.12.1                             java-archive                  
 joda-time                                 2.12.7                             java-archive                  
 jq                                        1.7.1-3build1                      deb                           
-jrt-fs                                    17.0.12                            java-archive                  
+jrt-fs                                    17.0.13                            java-archive                  
 json                                      20231013                           java-archive                  
 jsr305                                    3.0.1                              java-archive                  
 jsr305                                    3.0.2                              java-archive                  
@@ -258,7 +258,7 @@ mount                                     2.39.3-9ubuntu6.1                  deb
 ncurses-base                              6.4+20240113-1ubuntu2              deb                           
 ncurses-bin                               6.4+20240113-1ubuntu2              deb                           
 netcat-openbsd                            1.226-1ubuntu2                     deb                           
-openjdk-17-jre-headless                   17.0.12+7-1ubuntu2~24.04           deb                           
+openjdk-17-jre-headless                   17.0.13+11-2ubuntu1~24.04          deb                           
 openssh                                   1.0                                java-archive                  
 openssl                                   3.0.13-0ubuntu3.4                  deb                           
 org.eclipse.paho.client.mqttv3            1.1.0                              java-archive                  
