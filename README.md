@@ -148,7 +148,6 @@ The simplest migration approach is to take a full backup of your existing instal
 
 You can then start up the new container with a clean `/config` mount (and a database container configured), and perform a restore using the setup wizard.
 
- 
 ### Strict reverse proxies
 
 This image uses a self-signed certificate by default. This naturally means the scheme is `https`.
@@ -157,6 +156,9 @@ If you are using a reverse proxy which validates certificates, you need to [disa
 ## Usage
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
+
+>[!NOTE]
+>Unless a parameter is flaged as 'optional', it is *mandatory* and a value must be provided.
 
 ### docker-compose (recommended, [click here for more info](https://docs.linuxserver.io/general/docker-compose))
 
@@ -231,10 +233,10 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 | Parameter | Function |
 | :----: | --- |
-| `-p 8443` | Unifi web admin port |
-| `-p 3478/udp` | Unifi STUN port |
-| `-p 10001/udp` | Required for AP discovery |
-| `-p 8080` | Required for device communication |
+| `-p 8443:8443` | Unifi web admin port |
+| `-p 3478:3478/udp` | Unifi STUN port |
+| `-p 10001:10001/udp` | Required for AP discovery |
+| `-p 8080:8080` | Required for device communication |
 | `-p 1900/udp` | Required for `Make controller discoverable on L2 network` option |
 | `-p 8843` | Unifi guest portal HTTPS redirect port |
 | `-p 8880` | Unifi guest portal HTTP redirect port |
