@@ -6,49 +6,42 @@ project_url: "https://ui.com/"
 project_logo: "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/unifi-banner.png"
 project_blurb: "The [{{ project_name|capitalize }}]({{ project_url }}) software is a powerful, enterprise wireless software engine ideal for high-density client deployments requiring low latency and high uptime performance."
 project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
-
 # supported architectures
 available_architectures:
-  - { arch: "{{ arch_x86_64 }}", tag: "amd64-latest"}
-  - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
-
+  - {arch: "{{ arch_x86_64 }}", tag: "amd64-latest"}
+  - {arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
 # container parameters
 param_container_name: "{{ project_name }}"
 param_usage_include_vols: true
 param_volumes:
-  - { vol_path: "/config", vol_host_path: "/path/to/{{ project_name }}/data", desc: "Persistent config files" }
-
+  - {vol_path: "/config", vol_host_path: "/path/to/{{ project_name }}/data", desc: "Persistent config files"}
 param_usage_include_ports: true
 param_ports:
-  - { external_port: "8443", internal_port: "8443", port_desc: "Unifi web admin port" }
-  - { external_port: "3478", internal_port: "3478/udp", port_desc: "Unifi STUN port" }
-  - { external_port: "10001", internal_port: "10001/udp", port_desc: "Required for AP discovery" }
-  - { external_port: "8080", internal_port: "8080", port_desc: "Required for device communication" }
-
+  - {external_port: "8443", internal_port: "8443", port_desc: "Unifi web admin port"}
+  - {external_port: "3478", internal_port: "3478/udp", port_desc: "Unifi STUN port"}
+  - {external_port: "10001", internal_port: "10001/udp", port_desc: "Required for AP discovery"}
+  - {external_port: "8080", internal_port: "8080", port_desc: "Required for device communication"}
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**." }
-  - { env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**." }
-  - { env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run." }
-  - { env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run." }
-  - { env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run." }
-  - { env_var: "MONGO_AUTHSOURCE", env_value: "admin", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run." }
-
+  - {env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
+  - {env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
+  - {env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run."}
+  - {env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run."}
+  - {env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run."}
+  - {env_var: "MONGO_AUTHSOURCE", env_value: "admin", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run."}
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
-  - { env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default" }
-  - { env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default" }
-  - { env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run." }
-
+  - {env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default"}
+  - {env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default"}
+  - {env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run."}
 opt_param_usage_include_ports: true
 opt_param_ports:
-  - { external_port: "1900", internal_port: "1900/udp", port_desc: "Required for `Make controller discoverable on L2 network` option" }
-  - { external_port: "8843", internal_port: "8843", port_desc: "Unifi guest portal HTTPS redirect port" }
-  - { external_port: "8880", internal_port: "8880", port_desc: "Unifi guest portal HTTP redirect port" }
-  - { external_port: "6789", internal_port: "6789", port_desc: "For mobile throughput test" }
-  - { external_port: "5514", internal_port: "5514/udp", port_desc: "Remote syslog port" }
-
+  - {external_port: "1900", internal_port: "1900/udp", port_desc: "Required for `Make controller discoverable on L2 network` option"}
+  - {external_port: "8843", internal_port: "8843", port_desc: "Unifi guest portal HTTPS redirect port"}
+  - {external_port: "8880", internal_port: "8880", port_desc: "Unifi guest portal HTTP redirect port"}
+  - {external_port: "6789", internal_port: "6789", port_desc: "For mobile throughput test"}
+  - {external_port: "5514", internal_port: "5514/udp", port_desc: "Remote syslog port"}
 # application setup block
 app_setup_block_enabled: true
 app_setup_block: |
@@ -141,11 +134,53 @@ app_setup_block: |
   The simplest migration approach is to take a full backup of your existing install, including history, from the Unifi-Controller web UI, then shut down the old container.
 
   You can then start up the new container with a clean `/config` mount (and a database container configured), and perform a restore using the setup wizard.
-
+# init diagram
+init_diagram: |
+  "unifi-network-application:latest": {
+    docker-mods
+    base {
+      fix-attr +\nlegacy cont-init
+    }
+    docker-mods -> base
+    legacy-services
+    custom services
+    init-services -> legacy-services
+    init-services -> custom services
+    custom services -> legacy-services
+    legacy-services -> ci-service-check
+    init-migrations -> init-adduser
+    init-os-end -> init-config
+    init-config -> init-config-end
+    init-unifi-network-application-config -> init-config-end
+    init-os-end -> init-crontab-config
+    init-mods-end -> init-custom-files
+    base -> init-envfile
+    base -> init-migrations
+    base -> init-mods
+    init-config-end -> init-mods
+    init-mods -> init-mods-end
+    init-mods-package-install -> init-mods-end
+    init-mods -> init-mods-package-install
+    base -> init-os-end
+    init-adduser -> init-os-end
+    init-envfile -> init-os-end
+    init-migrations -> init-os-end
+    init-custom-files -> init-services
+    init-mods-end -> init-services
+    init-config -> init-unifi-network-application-config
+    init-services -> svc-cron
+    svc-cron -> legacy-services
+    init-services -> svc-unifi-network-application
+    svc-unifi-network-application -> legacy-services
+  }
+  Base Images: {
+    "baseimage-ubuntu:noble"
+  }
+  "unifi-network-application:latest" <- Base Images
 # changelog
 changelogs:
-  - { date: "11.08.24:", desc: "**Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup." }
-  - { date: "11.08.24:", desc: "Rebase to Ubuntu Noble." }
-  - { date: "04.03.24:", desc: "Install from zip package instead of deb." }
-  - { date: "17.10.23:", desc: "Add environment variables for TLS and authSource to support Atlas and new MongoDB versions." }
-  - { date: "05.09.23:", desc: "Initial release." }
+  - {date: "11.08.24:", desc: "**Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup."}
+  - {date: "11.08.24:", desc: "Rebase to Ubuntu Noble."}
+  - {date: "04.03.24:", desc: "Install from zip package instead of deb."}
+  - {date: "17.10.23:", desc: "Add environment variables for TLS and authSource to support Atlas and new MongoDB versions."}
+  - {date: "05.09.23:", desc: "Initial release."}
