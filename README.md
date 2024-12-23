@@ -157,6 +157,9 @@ If you are using a reverse proxy which validates certificates, you need to [disa
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
 
+>[!NOTE]
+>Unless a parameter is flaged as 'optional', it is *mandatory* and a value must be provided.
+
 ### docker-compose (recommended, [click here for more info](https://docs.linuxserver.io/general/docker-compose))
 
 ```yaml
@@ -228,10 +231,10 @@ Containers are configured using parameters passed at runtime (such as those abov
 
 | Parameter | Function |
 | :----: | --- |
-| `-p 8443` | Unifi web admin port |
-| `-p 3478/udp` | Unifi STUN port |
-| `-p 10001/udp` | Required for AP discovery |
-| `-p 8080` | Required for device communication |
+| `-p 8443:8443` | Unifi web admin port |
+| `-p 3478:3478/udp` | Unifi STUN port |
+| `-p 10001:10001/udp` | Required for AP discovery |
+| `-p 8080:8080` | Required for device communication |
 | `-p 1900/udp` | Required for `Make controller discoverable on L2 network` option |
 | `-p 8843` | Unifi guest portal HTTPS redirect port |
 | `-p 8880` | Unifi guest portal HTTP redirect port |
@@ -403,10 +406,10 @@ docker build \
   -t lscr.io/linuxserver/unifi-network-application:latest .
 ```
 
-The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-static`
+The ARM variants can be built on x86_64 hardware and vice versa using `lscr.io/linuxserver/qemu-static`
 
 ```bash
-docker run --rm --privileged multiarch/qemu-user-static:register --reset
+docker run --rm --privileged lscr.io/linuxserver/qemu-static --reset
 ```
 
 Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
