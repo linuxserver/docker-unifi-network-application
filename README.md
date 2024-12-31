@@ -64,7 +64,7 @@ After setup, the web UI is available at https://ip:8443. The application can be 
 
 ### Setting Up Your External Database
 
-Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported.
+Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported. Starting with version 9.0 of Unifi Network Application, mongodb 8.0 is supported.
 
 **Make sure you pin your database image version and do not use `latest`, as mongodb does not support automatic upgrades between major versions.**
 
@@ -418,6 +418,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **06.01.25:** - Bump JRE to 21.
 * **11.08.24:** - **Important**: The mongodb init instructions have been updated to enable auth ([RBAC](https://www.mongodb.com/docs/manual/core/authorization/#role-based-access-control)). We have been notified that if RBAC is not enabled, the official mongodb container allows remote access to the db contents over port 27017 without credentials. If you set up the mongodb container with the old instructions we provided, you should not map or expose port 27017. If you would like to enable auth, the easiest way is to create new instances of both unifi and mongodb with the new instructions and restore unifi from a backup.
 * **11.08.24:** - Rebase to Ubuntu Noble.
 * **04.03.24:** - Install from zip package instead of deb.
