@@ -23,15 +23,17 @@ param_ports:
   - {external_port: "8080", internal_port: "8080", port_desc: "Required for device communication"}
 param_usage_include_env: true
 param_env_vars:
-  - {env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
-  - {env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
   - {env_var: "MONGO_HOST", env_value: "unifi-db", desc: "Mongodb Hostname. Only evaluated on first run."}
   - {env_var: "MONGO_PORT", env_value: "27017", desc: "Mongodb Port. Only evaluated on first run."}
-  - {env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name (stats DB is automatically suffixed with `_stat`). Only evaluated on first run."}
-  - {env_var: "MONGO_AUTHSOURCE", env_value: "admin", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run."}
+  - {env_var: "MONGO_DBNAME", env_value: "unifi", desc: "Mongodb Database Name. Only evaluated on first run."}
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
+  - {env_var: "MONGO_USER", env_value: "unifi", desc: "Mongodb Username. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
+  - {env_var: "MONGO_PASS", env_value: "", desc: "Mongodb Password. Only evaluated on first run. **Special characters must be [url encoded](https://en.wikipedia.org/wiki/Percent-encoding)**."}
+  - {env_var: "MONGO_STATDBNAME", env_value: "unifi_stat", desc: "Mongodb stats Database Name. If not specified will use MONGO_DBNAME with `_stat` suffix. Only evaluated on first run."}
+  - {env_var: "MONGO_AUTHSOURCE", env_value: "admin", desc: "Mongodb [authSource](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.authSource). For Atlas set to `admin`. Only evaluated on first run."}
+  - {env_var: "MONGO_AUTHMECHANISM", env_value: "SCRAM-SHA-256", desc: "Mongodb [authMechanism](https://www.mongodb.com/docs/drivers/java/sync/current/fundamentals/auth/). For FerretDB with Postgres set to `PLAIN`. Only evaluated on first run."}
   - {env_var: "MEM_LIMIT", env_value: "1024", desc: "Optionally change the Java memory limit (in Megabytes). Set to `default` to reset to default"}
   - {env_var: "MEM_STARTUP", env_value: "1024", desc: "Optionally change the Java initial/minimum memory (in Megabytes). Set to `default` to reset to default"}
   - {env_var: "MONGO_TLS", env_value: "", desc: "Mongodb enable [TLS](https://www.mongodb.com/docs/manual/reference/connection-string/#mongodb-urioption-urioption.tls). Only evaluated on first run."}
