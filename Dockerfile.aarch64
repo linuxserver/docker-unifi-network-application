@@ -19,7 +19,7 @@ RUN \
   apt-get install --no-install-recommends -y \
     jsvc \
     logrotate \
-    openjdk-17-jre-headless \
+    openjdk-21-jre-headless \
     unzip && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
