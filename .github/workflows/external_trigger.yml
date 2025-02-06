@@ -15,7 +15,10 @@ jobs:
           SKIP_EXTERNAL_TRIGGER: ${{ vars.SKIP_EXTERNAL_TRIGGER }}
         run: |
           printf "# External trigger for docker-unifi-network-application\n\n" >> $GITHUB_STEP_SUMMARY
-          if grep -q "^unifi-network-application_main" <<< "${SKIP_EXTERNAL_TRIGGER}"; then
+          if grep -q "^unifi-network-application_main_" <<< "${SKIP_EXTERNAL_TRIGGER}"; then
+            echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
+            echo "> Github organizational variable \`SKIP_EXTERNAL_TRIGGER\` contains \`unifi-network-application_main_\`; will skip trigger if version matches." >> $GITHUB_STEP_SUMMARY
+          elif grep -q "^unifi-network-application_main" <<< "${SKIP_EXTERNAL_TRIGGER}"; then
             echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
             echo "> Github organizational variable \`SKIP_EXTERNAL_TRIGGER\` contains \`unifi-network-application_main\`; skipping trigger." >> $GITHUB_STEP_SUMMARY
             exit 0
@@ -23,8 +26,13 @@ jobs:
           echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
           echo "> External trigger running off of main branch. To disable this trigger, add \`unifi-network-application_main\` into the Github organizational variable \`SKIP_EXTERNAL_TRIGGER\`." >> $GITHUB_STEP_SUMMARY
           printf "\n## Retrieving external version\n\n" >> $GITHUB_STEP_SUMMARY
-          EXT_RELEASE=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}')
+          EXT_RELEASE=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages.gz | gunzip | grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}')
           echo "Type is \`custom_version_command\`" >> $GITHUB_STEP_SUMMARY
+          if grep -q "^unifi-network-application_main_${EXT_RELEASE}" <<< "${SKIP_EXTERNAL_TRIGGER}"; then
+            echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
+            echo "> Github organizational variable \`SKIP_EXTERNAL_TRIGGER\` matches current external release; skipping trigger." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
           if [ -z "${EXT_RELEASE}" ] || [ "${EXT_RELEASE}" == "null" ]; then
             echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
             echo "> Can't retrieve external version, exiting" >> $GITHUB_STEP_SUMMARY

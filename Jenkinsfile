@@ -56,11 +56,21 @@ pipeline {
       steps{
         echo "Running on node: ${NODE_NAME}"
         sh '''#! /bin/bash
-              containers=$(docker ps -aq)
+              echo "Pruning builder"
+              docker builder prune -f --builder container || :
+              containers=$(docker ps -q)
               if [[ -n "${containers}" ]]; then
-                docker stop ${containers}
+                BUILDX_CONTAINER_ID=$(docker ps -qf 'name=buildx_buildkit')
+                for container in ${containers}; do
+                  if [[ "${container}" == "${BUILDX_CONTAINER_ID}" ]]; then
+                    echo "skipping buildx container in docker stop"
+                  else
+                    echo "Stopping container ${container}"
+                    docker stop ${container}
+                  fi
+                done
               fi
-              docker system prune -af --volumes || : '''
+              docker system prune -f --volumes || : '''
         script{
           env.EXIT_STATUS = ''
           env.LS_RELEASE = sh(
@@ -131,7 +141,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages |grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}' ''',
+            script: ''' curl -sX GET https://dl.ui.com/unifi/debian/dists/stable/ubiquiti/binary-amd64/Packages.gz | gunzip | grep -A 7 -m 1 'Package: unifi' | awk -F ': ' '/Version/{print $2;exit}' | awk -F '-' '{print $1}' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }
@@ -1152,12 +1162,21 @@ EOF
     }
     cleanup {
       sh '''#! /bin/bash
-            echo "Performing docker system prune!!"
-            containers=$(docker ps -aq)
+            echo "Pruning builder!!"
+            docker builder prune -f --builder container || :
+            containers=$(docker ps -q)
             if [[ -n "${containers}" ]]; then
-              docker stop ${containers}
+              BUILDX_CONTAINER_ID=$(docker ps -qf 'name=buildx_buildkit')
+              for container in ${containers}; do
+                if [[ "${container}" == "${BUILDX_CONTAINER_ID}" ]]; then
+                  echo "skipping buildx container in docker stop"
+                else
+                  echo "Stopping container ${container}"
+                  docker stop ${container}
+                fi
+              done
             fi
-            docker system prune -af --volumes || :
+            docker system prune -f --volumes || :
          '''
       cleanWs()
     }
