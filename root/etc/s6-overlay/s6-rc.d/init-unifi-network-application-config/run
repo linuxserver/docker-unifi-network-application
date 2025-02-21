@@ -30,7 +30,7 @@ fi
 if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
-        sleep infinity
+        exit 255
     else
         echo "*** Waiting for MONGO_HOST ${MONGO_HOST} to be reachable. ***"
         DBCOUNT=0
@@ -41,7 +41,7 @@ if [[ ! -e /config/data/system.properties ]]; then
             DBCOUNT=$((DBCOUNT+1))
             if [[ ${DBCOUNT} -gt 6 ]]; then
                 echo "*** Defined MONGO_HOST ${MONGO_HOST} is not reachable, cannot proceed. ***"
-                sleep infinity
+                exit 255
             fi
             sleep 5
         done
@@ -64,11 +64,20 @@ if [[ ! -e /config/data/system.properties ]]; then
     fi
 fi
 
-# generate key
+# configure keystore
 if [[ ! -f /config/data/keystore ]]; then
-    keytool -genkey -keyalg RSA -alias unifi -keystore /config/data/keystore \
-    -storepass aircontrolenterprise -keypass aircontrolenterprise -validity 3650 \
-    -keysize 4096 -dname "cn=unifi" -ext san=dns:unifi
+    if [[ -f /certs/keystore.jks ]]; then
+        echo "*** DETECTED certificate, adding to keystore, not generating unique ***"
+
+        keytool -importkeystore -srckeystore /certs/keystore.jks -srcstoretype JKS -srcstorepass aircontrolenterprise -destkeystore /config/data/keystore -deststoretype PKCS12 -storepass aircontrolenterprise
+
+        echo "*** Certificate inserted ***"
+    else
+        # generate key
+        keytool -genkey -keyalg RSA -alias unifi -keystore /config/data/keystore \
+        -storepass aircontrolenterprise -keypass aircontrolenterprise -validity 3650 \
+        -keysize 4096 -dname "cn=unifi" -ext san=dns:unifi
+    fi 
 fi
 
 # permissions
