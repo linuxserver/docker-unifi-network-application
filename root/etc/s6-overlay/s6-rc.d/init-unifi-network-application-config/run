@@ -1,6 +1,8 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
+STATDB_NAME=${MONGO_STATDBNAME:-${MONGO_DBNAME}_stat}
+
 # create our folders
 mkdir -p \
     /run/unifi/work/ROOT \
@@ -45,11 +47,15 @@ if [[ ! -e /config/data/system.properties ]]; then
             fi
             sleep 5
         done
-        sed -i "s/~MONGO_USER~/${MONGO_USER}/" /defaults/system.properties
+        if [[ -n "${MONGO_USER}" || -n "${MONGO_PASS}" ]]; then
+            sed -i "s/~MONGO_CREDS~/${MONGO_USER}:${MONGO_PASS}@/" /defaults/system.properties
+        else
+            sed -i "s/~MONGO_CREDS~//" /defaults/system.properties
+        fi
         sed -i "s/~MONGO_HOST~/${MONGO_HOST}/" /defaults/system.properties
         sed -i "s/~MONGO_PORT~/${MONGO_PORT}/" /defaults/system.properties
         sed -i "s/~MONGO_DBNAME~/${MONGO_DBNAME}/" /defaults/system.properties
-        sed -i "s/~MONGO_PASS~/${MONGO_PASS}/" /defaults/system.properties
+        sed -i "s/~MONGO_STATDBNAME~/${STATDB_NAME}/" /defaults/system.properties
         if [[ "${MONGO_TLS,,}" = "true" ]]; then
             sed -i "s/~MONGO_TLS~/true/" /defaults/system.properties
         else
@@ -59,6 +65,11 @@ if [[ ! -e /config/data/system.properties ]]; then
             sed -i "s/~MONGO_AUTHSOURCE~//" /defaults/system.properties
         else
             sed -i "s/~MONGO_AUTHSOURCE~/\&authSource=${MONGO_AUTHSOURCE}/" /defaults/system.properties
+        fi
+        if [[ -z "${MONGO_AUTHMECHANISM}" ]]; then
+            sed -i "s/~MONGO_AUTHMECHANISM~//" /defaults/system.properties
+        else
+            sed -i "s/~MONGO_AUTHMECHANISM~/\&authMechanism=${MONGO_AUTHMECHANISM}/" /defaults/system.properties
         fi
         cp /defaults/system.properties /config/data
     fi
