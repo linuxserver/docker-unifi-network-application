@@ -210,10 +210,10 @@ libnspr4                                  2:4.35-1.1build1                   deb
 libnss3                                   2:3.98-1build1                     deb                           
 libonig5                                  6.9.9-1build1                      deb                           
 libp11-kit0                               0.25.3-4ubuntu2.1                  deb                           
-libpam-modules                            1.5.3-5ubuntu5.1                   deb                           
-libpam-modules-bin                        1.5.3-5ubuntu5.1                   deb                           
-libpam-runtime                            1.5.3-5ubuntu5.1                   deb                           
-libpam0g                                  1.5.3-5ubuntu5.1                   deb                           
+libpam-modules                            1.5.3-5ubuntu5.4                   deb                           
+libpam-modules-bin                        1.5.3-5ubuntu5.4                   deb                           
+libpam-runtime                            1.5.3-5ubuntu5.4                   deb                           
+libpam0g                                  1.5.3-5ubuntu5.4                   deb                           
 libpcre2-8-0                              10.42-4ubuntu2.1                   deb                           
 libpcsclite1                              2.0.3-1build1                      deb                           
 libpopt0                                  1.19+dfsg-1build1                  deb                           
