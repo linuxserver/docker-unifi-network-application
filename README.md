@@ -170,10 +170,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - MONGO_USER=unifi
-      - MONGO_PASS=
-      - MONGO_HOST=unifi-db
-      - MONGO_PORT=27017
+      - MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/unifi?retryWrites=true&w=majority&appName=unifi
+      - STAT_MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/unifi_stats?retryWrites=true&w=majority&appName=unifi
       - MONGO_DBNAME=unifi
       - MONGO_AUTHSOURCE=admin
       - MEM_LIMIT=1024 #optional
@@ -202,10 +200,8 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Etc/UTC \
-  -e MONGO_USER=unifi \
-  -e MONGO_PASS= \
-  -e MONGO_HOST=unifi-db \
-  -e MONGO_PORT=27017 \
+  -e MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
+  -e STAT_MONGO_URI=mongodb+srv://unifi:password@unifi.mongodb.net/?retryWrites=true&w=majority&appName=unifi \
   -e MONGO_DBNAME=unifi \
   -e MONGO_AUTHSOURCE=admin \
   -e MEM_LIMIT=1024 `#optional` \
