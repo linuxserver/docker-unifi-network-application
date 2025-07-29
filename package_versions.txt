@@ -142,7 +142,7 @@ jgraphx                                   2.0.0.1                            jav
 jmdns                                     3.4.1                              java-archive                  
 jna                                       5.12.1                             java-archive                  
 joda-time                                 2.12.7                             java-archive                  
-jq                                        1.7.1-3build1                      deb                           
+jq                                        1.7.1-3ubuntu0.24.04.1             deb                           
 jrt-fs                                    17.0.15                            java-archive                  
 json                                      20231013                           java-archive                  
 jsonschema-generator                      4.37.0                             java-archive                  
@@ -189,7 +189,7 @@ libhogweed6t64                            3.9.1-2.2build1.1                  deb
 libidn2-0                                 2.3.7-2build1.1                    deb                           
 libjpeg-turbo8                            2.1.5-2ubuntu2                     deb                           
 libjpeg8                                  8c-2ubuntu11                       deb                           
-libjq1                                    1.7.1-3build1                      deb                           
+libjq1                                    1.7.1-3ubuntu0.24.04.1             deb                           
 libk5crypto3                              1.20.1-6ubuntu2.6                  deb                           
 libkeyutils1                              1.6.3-3build1                      deb                           
 libkrb5-3                                 1.20.1-6ubuntu2.6                  deb                           
