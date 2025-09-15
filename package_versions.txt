@@ -1,9 +1,10 @@
 NAME                                      VERSION                            TYPE                         
 ace                                       UNKNOWN                            java-archive                  
 adduser                                   3.137ubuntu1                       deb                           
-analytics-api                             2.0.0                              java-archive                  
-analytics-client                          2.0.0                              java-archive                  
-analytics-privacy                         2.0.0                              java-archive                  
+ahocorasick                               0.6.3                              java-archive                  
+analytics-api                             2.1.0                              java-archive                  
+analytics-client                          2.1.0                              java-archive                  
+analytics-privacy                         2.1.0                              java-archive                  
 angus-activation                          2.0.2                              java-archive                  
 angus-core                                2.0.3                              java-archive                  
 angus-mail                                2.0.3                              java-archive                  
@@ -46,7 +47,7 @@ commons-text                              1.12.0                             jav
 commons-validator                         1.9.0                              java-archive                  
 compiler                                  0.9.6                              java-archive                  
 core                                      UNKNOWN                            java-archive                  
-coreutils                                 9.4-3ubuntu6                       deb                           
+coreutils                                 9.4-3ubuntu6.1                     deb                           
 cron                                      3.0pl1-184ubuntu2                  deb                           
 cron-daemon-common                        3.0pl1-184ubuntu2                  deb                           
 cron4j                                    2.2.5                              java-archive                  
@@ -321,9 +322,10 @@ stax-api                                  1.0-2                              jav
 systemd-standalone-sysusers               255.4-1ubuntu8.10                  deb                           
 sysvinit-utils                            3.08-6ubuntu3                      deb                           
 tar                                       1.35+dfsg-3build1                  deb                           
-tomcat-embed-core                         10.1.40                            java-archive                  
-tomcat-embed-el                           10.1.40                            java-archive                  
-tomcat-embed-websocket                    10.1.40                            java-archive                  
+tomcat-annotations-api                    10.1.44                            java-archive                  
+tomcat-embed-core                         10.1.44                            java-archive                  
+tomcat-embed-el                           10.1.44                            java-archive                  
+tomcat-embed-websocket                    10.1.44                            java-archive                  
 txw2                                      4.0.5                              java-archive                  
 tzdata                                    2025b-0ubuntu0.24.04.1             deb                           
 ubuntu-keyring                            2023.11.28.1                       deb                           
