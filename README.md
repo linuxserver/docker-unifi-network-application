@@ -416,6 +416,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **20.10.25:** - Switch to using FW API endpoint for version checks.
 * **08.05.25:** - Update sample `init-mongo.sh` for compatibility with 9.1.120 (only affects new installs).
 * **13.02.25:** - Revert JRE to 17.
 * **12.02.25:** - Bump JRE to 21.
