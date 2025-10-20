@@ -181,6 +181,7 @@ init_diagram: |
   "unifi-network-application:latest" <- Base Images
 # changelog
 changelogs:
+  - {date: "20.10.25:", desc: "Switch to using FW API endpoint for version checks."}
   - {date: "08.05.25:", desc: "Update sample `init-mongo.sh` for compatibility with 9.1.120 (only affects new installs)."}
   - {date: "13.02.25:", desc: "Revert JRE to 17."}
   - {date: "12.02.25:", desc: "Bump JRE to 21."}

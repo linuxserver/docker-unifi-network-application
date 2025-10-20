@@ -10,7 +10,6 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="thespad"
 
 # environment settings
-ARG UNIFI_BRANCH="stable"
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN \
@@ -23,16 +22,16 @@ RUN \
     unzip && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
-    UNIFI_VERSION=$(curl -sX GET https://dl.ui.com/unifi/debian/dists/${UNIFI_BRANCH}/ubiquiti/binary-amd64/Packages.gz \
-    | gunzip \
-    | grep -A 7 -m 1 'Package: unifi' \
-    | awk -F ': ' '/Version/{print $2;exit}' \
-    | awk -F '-' '{print $1}'); \
+    UNIFI_VERSION=$(curl -sX GET "https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release" \
+    | jq -r '._embedded.firmware[].version' \
+    | awk -F '+' '{print $1}'); \
   fi && \
+  UNIFI_DOWNLOAD=$(curl -sX GET "https://fw-update.ubnt.com/api/firmware?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release&sort=-version" \
+  | jq -r "._embedded.firmware[] | select(.version | test(\"${UNIFI_VERSION}\")) | ._links.data.href") && \
   mkdir -p /app && \
   curl -o \
   /tmp/unifi.zip -L \
-    "https://dl.ui.com/unifi/${UNIFI_VERSION}/UniFi.unix.zip" && \
+    "${UNIFI_DOWNLOAD}" && \
   unzip /tmp/unifi.zip -d /usr/lib && \
   mv /usr/lib/UniFi /usr/lib/unifi && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
