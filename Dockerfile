@@ -24,10 +24,11 @@ RUN \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET "https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release" \
     | jq -r '._embedded.firmware[].version' \
-    | awk -F '+' '{print $1}'); \
+    | awk -F '+' '{print $1}' \
+    | tr -d 'v'); \
   fi && \
   UNIFI_DOWNLOAD=$(curl -sX GET "https://fw-update.ubnt.com/api/firmware?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release&sort=-version" \
-  | jq -r "._embedded.firmware[] | select(.version | test(\"${UNIFI_VERSION}\")) | ._links.data.href") && \
+  | jq -r "._embedded.firmware[] | select(.version | test(\"v${UNIFI_VERSION}\")) | ._links.data.href") && \
   mkdir -p /app && \
   curl -o \
   /tmp/unifi.zip -L \

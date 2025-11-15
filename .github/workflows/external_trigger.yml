@@ -29,7 +29,7 @@ jobs:
           echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
           echo "> External trigger running off of main branch. To disable this trigger, add \`unifi-network-application_main\` into the Github organizational variable \`SKIP_EXTERNAL_TRIGGER\`." >> $GITHUB_STEP_SUMMARY
           printf "\n## Retrieving external version\n\n" >> $GITHUB_STEP_SUMMARY
-          EXT_RELEASE=$(curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}')
+          EXT_RELEASE=$(curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}' | tr -d 'v')
           echo "Type is \`custom_version_command\`" >> $GITHUB_STEP_SUMMARY
           if grep -q "^unifi-network-application_main_${EXT_RELEASE}" <<< "${SKIP_EXTERNAL_TRIGGER}"; then
             echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
