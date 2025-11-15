@@ -3,7 +3,7 @@
 # jenkins variables
 project_name: unifi-network-application
 external_type: na
-custom_version_command: "curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}'"
+custom_version_command: "curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}' | tr -d 'v'"
 release_type: stable
 release_tag: latest
 ls_branch: main

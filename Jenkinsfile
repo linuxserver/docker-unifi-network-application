@@ -147,7 +147,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}' ''',
+            script: ''' curl -sX GET 'https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release' | jq -r '._embedded.firmware[].version' | awk -F '+' '{print $1}' | tr -d 'v' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }
