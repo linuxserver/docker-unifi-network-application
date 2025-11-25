@@ -11,6 +11,7 @@ LABEL maintainer="thespad"
 
 # environment settings
 ENV DEBIAN_FRONTEND="noninteractive"
+ENV ENVSUBST_VERSION=v1.4.3
 
 RUN \
   echo "**** install packages ****" && \
@@ -19,7 +20,11 @@ RUN \
     jsvc \
     logrotate \
     openjdk-17-jre-headless \
-    unzip && \
+    unzip \
+    gettext && \
+  curl -L https://github.com/a8m/envsubst/releases/download/${ENVSUBST_VERSION}/envsubst-`uname -s`-`uname -m` -o envsubst && \
+  chmod +x envsubst && \
+  mv envsubst /usr/local/bin && \
   echo "**** install unifi ****" && \
   if [ -z ${UNIFI_VERSION+x} ]; then \
     UNIFI_VERSION=$(curl -sX GET "https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~platform~~unix&filter=eq~~channel~~release" \
