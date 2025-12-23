@@ -22,7 +22,7 @@ bash                                  5.2.21-2ubuntu4                    deb
 bcpkix-jdk18on                        1.78.1                             java-archive                  
 bcprov-jdk18on                        1.78.1                             java-archive                  
 bcutil-jdk18on                        1.78.1                             java-archive                  
-bsdutils                              1:2.39.3-9ubuntu6.3                deb                           
+bsdutils                              1:2.39.3-9ubuntu6.4                deb                           
 bson                                  5.0.1                              java-archive                  
 bson-record-codec                     5.0.1                              java-archive                  
 builder                               2.10.1                             java-archive                  
@@ -145,7 +145,7 @@ libassuan0                            2.5.6-1build1                      deb
 libattr1                              1:2.5.2-1build1.1                  deb                           
 libaudit-common                       1:3.1.2-2.1build1.1                deb                           
 libaudit1                             1:3.1.2-2.1build1.1                deb                           
-libblkid1                             2.39.3-9ubuntu6.3                  deb                           
+libblkid1                             2.39.3-9ubuntu6.4                  deb                           
 libbrotli1                            1.1.0-2build2                      deb                           
 libbsd0                               0.12.1-1build1.1                   deb                           
 libbz2-1.0                            1.0.8-5.1build0.1                  deb                           
@@ -183,7 +183,7 @@ libldap2                              2.6.7+dfsg-1~exp1ubuntu8.2         deb
 liblz4-1                              1.9.4-1build1.1                    deb                           
 liblzma5                              5.6.1+really5.4.5-1ubuntu0.2       deb                           
 libmd0                                1.1.0-2build1.1                    deb                           
-libmount1                             2.39.3-9ubuntu6.3                  deb                           
+libmount1                             2.39.3-9ubuntu6.4                  deb                           
 libncursesw6                          6.4+20240113-1ubuntu2              deb                           
 libnettle8t64                         3.9.1-2.2build1.1                  deb                           
 libnghttp2-14                         1.59.0-1ubuntu0.2                  deb                           
@@ -211,7 +211,7 @@ libselinux1                           3.5-2ubuntu2.1                     deb
 libsemanage-common                    3.5-1build5                        deb                           
 libsemanage2                          3.5-1build5                        deb                           
 libsepol2                             3.5-2build1                        deb                           
-libsmartcols1                         2.39.3-9ubuntu6.3                  deb                           
+libsmartcols1                         2.39.3-9ubuntu6.4                  deb                           
 libsqlite3-0                          3.45.1-1ubuntu2.5                  deb                           
 libss2                                1.47.0-2.4~exp1ubuntu4.1           deb                           
 libssh-4                              0.10.6-2ubuntu0.2                  deb                           
@@ -222,7 +222,7 @@ libtasn1-6                            4.19.0-3ubuntu0.24.04.1            deb
 libtinfo6                             6.4+20240113-1ubuntu2              deb                           
 libudev1                              255.4-1ubuntu8.11                  deb                           
 libunistring5                         1.1-2build1.1                      deb                           
-libuuid1                              2.39.3-9ubuntu6.3                  deb                           
+libuuid1                              2.39.3-9ubuntu6.4                  deb                           
 libxxhash0                            0.8.2-2build1                      deb                           
 libzstd1                              1.5.5+dfsg2-2build1.1              deb                           
 locales                               2.39-0ubuntu8.6                    deb                           
@@ -244,7 +244,7 @@ micrometer-observation                1.13.15                            java-ar
 minimal-json                          0.9.5                              java-archive                  
 mongodb-driver-core                   5.0.1                              java-archive                  
 mongodb-driver-sync                   5.0.1                              java-archive                  
-mount                                 2.39.3-9ubuntu6.3                  deb                           
+mount                                 2.39.3-9ubuntu6.4                  deb                           
 ncurses-base                          6.4+20240113-1ubuntu2              deb                           
 ncurses-bin                           6.4+20240113-1ubuntu2              deb                           
 netcat-openbsd                        1.226-1ubuntu2                     deb                           
@@ -310,7 +310,7 @@ ubuntu-keyring                        2023.11.28.1                       deb
 unminimize                            0.2.1                              deb                           
 unzip                                 6.0-28ubuntu4.1                    deb                           
 urlrewritefilter                      4.0.4.1                            java-archive                  
-util-linux                            2.39.3-9ubuntu6.3                  deb                           
+util-linux                            2.39.3-9ubuntu6.4                  deb                           
 value-annotations                     2.10.1                             java-archive                  
 xpp3                                  1.1.4c                             java-archive                  
 xsdlib                                2013.6.1                           java-archive                  
