@@ -30,7 +30,7 @@ fi
 if [[ ! -e /config/data/system.properties ]]; then
     if [[ -z "${MONGO_HOST}" ]]; then
         echo "*** No MONGO_HOST set, cannot configure database settings. ***"
-        exit 255
+        sleep infinity
     else
         echo "*** Waiting for MONGO_HOST ${MONGO_HOST} to be reachable. ***"
         DBCOUNT=0
@@ -41,7 +41,7 @@ if [[ ! -e /config/data/system.properties ]]; then
             DBCOUNT=$((DBCOUNT+1))
             if [[ ${DBCOUNT} -gt 6 ]]; then
                 echo "*** Defined MONGO_HOST ${MONGO_HOST} is not reachable, cannot proceed. ***"
-                exit 255
+                sleep infinity
             fi
             sleep 5
         done
