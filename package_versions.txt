@@ -12,7 +12,7 @@ apt-utils                             2.8.3                              deb
 asn-one                               0.6.0                              java-archive                  
 aws-iot-device-sdk-java               1.2.0                              java-archive                  
 aws-java-sdk-core                     1.12.777                           java-archive                  
-base-files                            13ubuntu10.3                       deb                           
+base-files                            13ubuntu10.4                       deb                           
 base-passwd                           3.6.3build1                        deb                           
 bash                                  5.2.21-2ubuntu4                    deb                           
 bcpkix-jdk18on                        1.78.1                             java-archive                  
