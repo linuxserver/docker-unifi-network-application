@@ -186,7 +186,7 @@ libnettle8t64                         3.9.1-2.2build1.1                  deb
 libnghttp2-14                         1.59.0-1ubuntu0.2                  deb                           
 libnpth0t64                           1.6-3.1build1                      deb                           
 libnspr4                              2:4.35-1.1build1                   deb                           
-libnss3                               2:3.98-1build1                     deb                           
+libnss3                               2:3.98-1ubuntu0.1                  deb                           
 libonig5                              6.9.9-1build1                      deb                           
 libp11-kit0                           0.25.3-4ubuntu2.1                  deb                           
 libpam-modules                        1.5.3-5ubuntu5.5                   deb                           
