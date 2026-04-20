@@ -79,7 +79,8 @@ app_setup_block: |
     roles: [
       { db: "${MONGO_DBNAME}", role: "dbOwner" },
       { db: "${MONGO_DBNAME}_stat", role: "dbOwner" },
-      { db: "${MONGO_DBNAME}_audit", role: "dbOwner" }
+      { db: "${MONGO_DBNAME}_audit", role: "dbOwner" },
+      { db: "${MONGO_DBNAME}_restore", role: "dbOwner" }
     ]
   })
   EOF
@@ -181,6 +182,7 @@ init_diagram: |
   "unifi-network-application:latest" <- Base Images
 # changelog
 changelogs:
+  - {date: "20.04.26:", desc: "Bump JRE to v25 to support v10.3+ of the application."}
   - {date: "20.10.25:", desc: "Switch to using FW API endpoint for version checks."}
   - {date: "08.05.25:", desc: "Update sample `init-mongo.sh` for compatibility with 9.1.120 (only affects new installs)."}
   - {date: "13.02.25:", desc: "Revert JRE to 17."}
