@@ -150,7 +150,7 @@ libbz2-1.0                            1.0.8-5.1build0.1                  deb
 libc-bin                              2.39-0ubuntu8.7                    deb                           
 libc6                                 2.39-0ubuntu8.7                    deb                           
 libcap-ng0                            0.8.4-2build2                      deb                           
-libcap2                               1:2.66-5ubuntu2.2                  deb                           
+libcap2                               1:2.66-5ubuntu2.4                  deb                           
 libcom-err2                           1.47.0-2.4~exp1ubuntu4.1           deb                           
 libcommons-daemon-java                1.0.15-11build1                    deb                           
 libcrypt1                             1:4.4.36-4build1                   deb                           
@@ -175,7 +175,7 @@ libkeyutils1                          1.6.3-3build1                      deb
 libkrb5-3                             1.20.1-6ubuntu2.6                  deb                           
 libkrb5support0                       1.20.1-6ubuntu2.6                  deb                           
 libksba8                              1.6.6-1build1                      deb                           
-liblcms2-2                            2.14-2build1                       deb                           
+liblcms2-2                            2.14-2ubuntu0.1                    deb                           
 libldap-common                        2.6.10+dfsg-0ubuntu0.24.04.1       deb                           
 libldap2                              2.6.10+dfsg-0ubuntu0.24.04.1       deb                           
 liblz4-1                              1.9.4-1build1.1                    deb                           
@@ -226,8 +226,8 @@ libzstd1                              1.5.5+dfsg2-2build1.1              deb
 locales                               2.39-0ubuntu8.7                    deb                           
 log4j-api                             2.24.3                             java-archive                  
 log4j-to-slf4j                        2.24.3                             java-archive                  
-logback-access-common                 2.0.6                              java-archive                  
-logback-access-tomcat                 2.0.6                              java-archive                  
+logback-access-common                 2.0.12                             java-archive                  
+logback-access-tomcat                 2.0.12                             java-archive                  
 logback-classic                       1.5.32                             java-archive                  
 logback-core                          1.5.32                             java-archive                  
 logging-mailhandler                   2.0.5                              java-archive                  
