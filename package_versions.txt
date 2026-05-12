@@ -48,7 +48,7 @@ coreutils                             9.4-3ubuntu6.2                     deb
 cron                                  3.0pl1-184ubuntu2                  deb                           
 cron-daemon-common                    3.0pl1-184ubuntu2                  deb                           
 cron4j                                2.2.5                              java-archive                  
-curl                                  8.5.0-2ubuntu10.8                  deb                           
+curl                                  8.5.0-2ubuntu10.9                  deb                           
 dash                                  0.5.12-6ubuntu5                    deb                           
 debconf                               1.5.86ubuntu1                      deb                           
 debianutils                           5.17build1                         deb                           
@@ -154,7 +154,7 @@ libcap2                               1:2.66-5ubuntu2.4                  deb
 libcom-err2                           1.47.0-2.4~exp1ubuntu4.1           deb                           
 libcommons-daemon-java                1.0.15-11build1                    deb                           
 libcrypt1                             1:4.4.36-4build1                   deb                           
-libcurl4t64                           8.5.0-2ubuntu10.8                  deb                           
+libcurl4t64                           8.5.0-2ubuntu10.9                  deb                           
 libdb5.3t64                           5.3.28+dfsg2-7                     deb                           
 libdebconfclient0                     0.271ubuntu3                       deb                           
 libext2fs2t64                         1.47.0-2.4~exp1ubuntu4.1           deb                           
@@ -184,7 +184,7 @@ libmd0                                1.1.0-2build1.1                    deb
 libmount1                             2.39.3-9ubuntu6.5                  deb                           
 libncursesw6                          6.4+20240113-1ubuntu2              deb                           
 libnettle8t64                         3.9.1-2.2build1.1                  deb                           
-libnghttp2-14                         1.59.0-1ubuntu0.2                  deb                           
+libnghttp2-14                         1.59.0-1ubuntu0.3                  deb                           
 libnpth0t64                           1.6-3.1build1                      deb                           
 libnspr4                              2:4.35-1.1build1                   deb                           
 libnss3                               2:3.98-1ubuntu0.1                  deb                           
@@ -265,7 +265,7 @@ reactor-core                          3.7.17                             java-ar
 readline-common                       8.2-4build1                        deb                           
 relaxngDatatype                       20020414                           java-archive                  
 resource-loader                       2.0.2                              java-archive                  
-sed                                   4.9-2build1                        deb                           
+sed                                   4.9-2ubuntu0.24.04.1               deb                           
 sensible-utils                        0.0.22                             deb                           
 slf4j-api                             2.0.17                             java-archive                  
 smtp                                  2.0.5                              java-archive                  
