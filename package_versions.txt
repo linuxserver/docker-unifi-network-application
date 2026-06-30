@@ -187,7 +187,7 @@ libnettle8t64                         3.9.1-2.2build1.1                  deb
 libnghttp2-14                         1.59.0-1ubuntu0.3                  deb                           
 libnpth0t64                           1.6-3.1build1                      deb                           
 libnspr4                              2:4.35-1.1build1                   deb                           
-libnss3                               2:3.98-1ubuntu0.1                  deb                           
+libnss3                               2:3.98-1ubuntu0.2                  deb                           
 libonig5                              6.9.9-1build1                      deb                           
 libp11-kit0                           0.25.3-4ubuntu2.1                  deb                           
 libpam-modules                        1.5.3-5ubuntu5.5                   deb                           
@@ -252,7 +252,7 @@ org.eclipse.paho.client.mqttv3        1.1.0                              java-ar
 owasp-java-html-sanitizer             20240325.1                         java-archive                  
 parsla                                0.2.0                              java-archive                  
 passwd                                1:4.13+dfsg1-4ubuntu3.2            deb                           
-perl-base                             5.38.2-3.2ubuntu0.2                deb                           
+perl-base                             5.38.2-3.2ubuntu0.3                deb                           
 pinentry-curses                       1.2.1-3ubuntu5                     deb                           
 pop3                                  2.0.5                              java-archive                  
 postgresql                            42.7.10                            java-archive                  
@@ -302,7 +302,7 @@ sshj                                  0.39.0                             java-ar
 stax-api                              1.0-2                              java-archive                  
 systemd-standalone-sysusers           255.4-1ubuntu8.16                  deb                           
 sysvinit-utils                        3.08-6ubuntu3                      deb                           
-tar                                   1.35+dfsg-3build1                  deb                           
+tar                                   1.35+dfsg-3ubuntu0.1               deb                           
 tomcat-annotations-api                10.1.52                            java-archive                  
 tomcat-embed-core                     10.1.52                            java-archive                  
 tomcat-embed-el                       10.1.52                            java-archive                  
