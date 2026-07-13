@@ -121,7 +121,7 @@ You can also run the commands directly against the database using either `mongo`
 
 ### Device Adoption
 
-For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to Settings > System > Advanced and set the Inform Host to a hostname or IP address accessible by your devices. Additionally the checkbox "Override" has to be checked, so that devices can connect to the controller during adoption (devices use the inform-endpoint during adoption).
+For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to UniFi Devices > Device Updates and Settings > Device SSH Settings, enable Inform Host Override and set the Inform Host to a hostname or IP address accessible by your devices (devices use the inform-endpoint during adoption).
 
 Note that you must use 8080:8080. If you MUST change the port, it must be changed on both sides and manually changed in your system.properties file. Otherwise, devices will initially communicate and then break after.
 
