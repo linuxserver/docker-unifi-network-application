@@ -121,7 +121,7 @@ You can also run the commands directly against the database using either `mongo`
 
 ### Device Adoption
 
-For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to Settings > System > Advanced and set the Inform Host to a hostname or IP address accessible by your devices. Additionally the checkbox "Override" has to be checked, so that devices can connect to the controller during adoption (devices use the inform-endpoint during adoption).
+For Unifi to adopt other devices, e.g. an Access Point, it is required to change the inform IP address. Because Unifi runs inside Docker by default it uses an IP address not accessible by other devices. To change this go to UniFi Devices > Device Updates and Settings > Device SSH Settings, enable Inform Host Override and set the Inform Host to a hostname or IP address accessible by your devices (devices use the inform-endpoint during adoption).
 
 Note that you must use 8080:8080. If you MUST change the port, it must be changed on both sides and manually changed in your system.properties file. Otherwise, devices will initially communicate and then break after.
 
@@ -418,6 +418,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **14.07.26:** - Rebase to Ubuntu Resolute.
 * **20.04.26:** - Bump JRE to v25 to support v10.3+ of the application.
 * **20.10.25:** - Switch to using FW API endpoint for version checks.
 * **08.05.25:** - Update sample `init-mongo.sh` for compatibility with 9.1.120 (only affects new installs).
