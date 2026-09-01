@@ -178,7 +178,7 @@ init_diagram: |
     svc-unifi-network-application -> legacy-services
   }
   Base Images: {
-    "baseimage-ubuntu:noble"
+    "baseimage-ubuntu:resolute"
   }
   "unifi-network-application:latest" <- Base Images
 # changelog
