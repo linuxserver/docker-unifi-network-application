@@ -52,6 +52,8 @@ app_setup_block: |
 
   **This container requires an external mongodb database instance.**
 
+  Please note that the ports listed in this readme are not exhaustive and may change upstream, please see the [official documentation](https://help.ui.com/hc/en-us/articles/218506997-Required-Ports-Reference) for the most up-to-date list.
+
   ### Setting Up Your External Database
 
   Starting with version 8.1 of Unifi Network Application, mongodb 3.6 through 7.0 are supported. Starting with version 9.0 of Unifi Network Application, mongodb 8.0 is also supported.
@@ -131,15 +133,6 @@ app_setup_block: |
 
   When using a Security Gateway (router) it could be that network connected devices are unable to obtain an ip address. This can be fixed by setting "DHCP Gateway IP", under Settings > Networks > network_name, to a correct (and accessible) ip address.
 
-  ### Migration From [Unifi-Controller](https://github.com/linuxserver/docker-unifi-controller)
-
-  If you were using the `mongoless` tag for the Unifi Controller container, you can switch directly to the Unifi Network Application container without needing to perform any migration steps.
-
-  **You cannot perform an in-place upgrade from an existing Unifi-Controller container, you must run a backup and then a restore.**
-
-  The simplest migration approach is to take a full backup of your existing install, including history, from the Unifi-Controller web UI, then shut down the old container.
-
-  You can then start up the new container with a clean `/config` mount (and a database container configured), and perform a restore using the setup wizard.
 # init diagram
 init_diagram: |
   "unifi-network-application:latest": {
