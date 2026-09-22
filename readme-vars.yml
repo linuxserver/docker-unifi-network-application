@@ -132,7 +132,6 @@ app_setup_block: |
   The default device password is `ubnt`. `$address` is the IP address of the host you are running this container on and `$AP-IP` is the Access Point IP address.
 
   When using a Security Gateway (router) it could be that network connected devices are unable to obtain an ip address. This can be fixed by setting "DHCP Gateway IP", under Settings > Networks > network_name, to a correct (and accessible) ip address.
-
 # init diagram
 init_diagram: |
   "unifi-network-application:latest": {
