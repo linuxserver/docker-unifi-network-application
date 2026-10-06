@@ -50,7 +50,7 @@ coreutils-from-uutils                 0.0.0~ubuntu25                         deb
 cron                                  3.0pl1-200ubuntu1                      deb                           
 cron-daemon-common                    3.0pl1-200ubuntu1                      deb                           
 cron4j                                2.2.5                                  java-archive                  
-curl                                  8.18.0-1ubuntu2.5                      deb                           
+curl                                  8.18.0-1ubuntu2.7                      deb                           
 dash                                  0.5.12-12ubuntu3                       deb                           
 debconf                               1.5.92                                 deb                           
 debianutils                           5.23.2build1                           deb                           
@@ -166,7 +166,7 @@ libcap-ng0                            0.8.5-4build5                          deb
 libcom-err2                           1.47.2-3ubuntu4                        deb                           
 libcommons-daemon-java                1.0.15-12build1                        deb                           
 libcrypt1                             1:4.5.1-1                              deb                           
-libcurl4t64                           8.18.0-1ubuntu2.5                      deb                           
+libcurl4t64                           8.18.0-1ubuntu2.7                      deb                           
 libdb5.3t64                           5.3.28+dfsg2-10ubuntu1                 deb                           
 libdebconfclient0                     0.280ubuntu1                           deb                           
 libext2fs2t64                         1.47.2-3ubuntu4                        deb                           
@@ -225,7 +225,7 @@ libsmartcols1                         2.41.3-3ubuntu2.2                      deb
 libsqlite3-0                          3.46.1-9ubuntu0.3                      deb                           
 libss2                                1.47.2-3ubuntu4                        deb                           
 libssh2-1t64                          1.11.1-1ubuntu0.26.04.4                deb                           
-libssl3t64                            3.5.5-1ubuntu3.5                       deb                           
+libssl3t64                            3.5.5-1ubuntu3.6                       deb                           
 libstdc++6                            16-20260322-1ubuntu1                   deb                           
 libsystemd0                           259.5-0ubuntu3.4                       deb                           
 libtasn1-6                            4.21.0-2                               deb                           
@@ -260,8 +260,8 @@ ncurses-bin                           6.6+20251231-1                         deb
 netcat-openbsd                        1.234-1                                deb                           
 openjdk-25-jre-headless               25.0.4.1+1-1~26.04.4                   deb                           
 openssh                               1.0                                    java-archive                  
-openssl                               3.5.5-1ubuntu3.5                       deb                           
-openssl-provider-legacy               3.5.5-1ubuntu3.5                       deb                           
+openssl                               3.5.5-1ubuntu3.6                       deb                           
+openssl-provider-legacy               3.5.5-1ubuntu3.6                       deb                           
 org.eclipse.paho.client.mqttv3        1.1.0                                  java-archive                  
 owasp-java-html-sanitizer             20240325.1                             java-archive                  
 parsla                                0.2.0                                  java-archive                  
