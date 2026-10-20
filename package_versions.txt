@@ -65,11 +65,9 @@ findutils                             4.10.0-3build2                         deb
 gcc-16-base                           16-20260322-1ubuntu1                   deb                           
 github.com/GehirnInc/crypt            v0.0.0-20230320061759-8cc1b52080c5     go-module                     
 github.com/canonical/go-flags         v0.0.0-20230403090104-105d09a091b8     go-module                     
-github.com/canonical/pebble           v1.32.3-0.20260908071357-f1688182910f  go-module                     
+github.com/canonical/pebble           v1.33.1-0.20260928054015-16d571fb31ca  go-module                     
 github.com/canonical/x-go             v0.0.0-20230522092633-7947a7587f5b     go-module                     
-github.com/gorilla/mux                v1.8.1                                 go-module                     
 github.com/gorilla/websocket          v1.5.3                                 go-module                     
-github.com/pkg/term                   v1.1.0                                 go-module                     
 gnu-coreutils                         9.7-3ubuntu2.1                         deb                           
 gnupg                                 2.4.8-4ubuntu3.1                       deb                           
 gnupg-l10n                            2.4.8-4ubuntu3.1                       deb                           
@@ -316,7 +314,7 @@ spring-websocket                      6.2.18                                 jav
 sqlite-jdbc                           3.53.1.0                               java-archive                  
 sshj                                  0.40.0                                 java-archive                  
 stax-api                              1.0-2                                  java-archive                  
-stdlib                                go1.26.7                               go-module                     
+stdlib                                go1.27.1                               go-module                     
 systemd-standalone-sysusers           259.5-0ubuntu3.4                       deb                           
 sysvinit-utils                        3.15-5ubuntu1                          deb                           
 tar                                   1.35+dfsg-4ubuntu0.4                   deb                           
