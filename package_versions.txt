@@ -65,15 +65,15 @@ findutils                             4.10.0-3build2                         deb
 gcc-16-base                           16-20260322-1ubuntu1                   deb                           
 github.com/GehirnInc/crypt            v0.0.0-20230320061759-8cc1b52080c5     go-module                     
 github.com/canonical/go-flags         v0.0.0-20230403090104-105d09a091b8     go-module                     
-github.com/canonical/pebble           v1.33.1-0.20260928054015-16d571fb31ca  go-module                     
+github.com/canonical/pebble           v1.33.3-0.20261021134118-f036f355de35  go-module                     
 github.com/canonical/x-go             v0.0.0-20230522092633-7947a7587f5b     go-module                     
 github.com/gorilla/websocket          v1.5.3                                 go-module                     
 gnu-coreutils                         9.7-3ubuntu2.1                         deb                           
 gnupg                                 2.4.8-4ubuntu3.1                       deb                           
 gnupg-l10n                            2.4.8-4ubuntu3.1                       deb                           
 gnupg-utils                           2.4.8-4ubuntu3.1                       deb                           
-golang.org/x/sys                      v0.47.0                                go-module                     
-golang.org/x/term                     v0.45.0                                go-module                     
+golang.org/x/sys                      v0.48.0                                go-module                     
+golang.org/x/term                     v0.46.0                                go-module                     
 google-http-client                    1.26.0                                 java-archive                  
 gopkg.in/tomb.v2                      v2.0.0-20161208151619-d5d1b5820637     go-module                     
 gopkg.in/yaml.v2                      v2.4.0                                 go-module                     
@@ -154,7 +154,7 @@ libattr1                              1:2.5.2-4ubuntu0.1                     deb
 libaudit-common                       1:4.1.2-1ubuntu0.1                     deb                           
 libaudit1                             1:4.1.2-1ubuntu0.1                     deb                           
 libblkid1                             2.41.3-3ubuntu2.2                      deb                           
-libbrotli1                            1.2.0-3build1                          deb                           
+libbrotli1                            1.2.0-3ubuntu0.1                       deb                           
 libbsd0                               0.12.2-2build2                         deb                           
 libbz2-1.0                            1.0.8-6ubuntu0.1                       deb                           
 libc-bin                              2.43-2ubuntu2.4                        deb                           
@@ -314,7 +314,7 @@ spring-websocket                      6.2.18                                 jav
 sqlite-jdbc                           3.53.1.0                               java-archive                  
 sshj                                  0.40.0                                 java-archive                  
 stax-api                              1.0-2                                  java-archive                  
-stdlib                                go1.27.1                               go-module                     
+stdlib                                go1.27.3                               go-module                     
 systemd-standalone-sysusers           259.9-0ubuntu0.1                       deb                           
 sysvinit-utils                        3.15-5ubuntu1                          deb                           
 tar                                   1.35+dfsg-4ubuntu0.4                   deb                           
@@ -331,4 +331,4 @@ util-linux                            2.41.3-3ubuntu2.2                      deb
 value-annotations                     2.10.1                                 java-archive                  
 xpp3                                  1.1.4c                                 java-archive                  
 xsdlib                                2013.6.1                               java-archive                  
-zlib1g                                1:1.3.dfsg+really1.3.1-1ubuntu3.1      deb                           
+zlib1g                                1:1.3.dfsg+really1.3.1-1ubuntu3.2      deb                           
